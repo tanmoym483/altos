@@ -79,7 +79,7 @@ $db['default'] = array(
 
 	'username' => 'root',
 	'password' => '',
-	'database' => 'stoxbw9q_aponjontrustapm',
+	'database' => 'stoxbw9q_altos',
 
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
