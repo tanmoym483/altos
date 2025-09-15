@@ -47,7 +47,7 @@
             <!-- Initial Product Fields (default) -->
             <div class="col-md-3">
               <label class="form-label">Product Name</label>
-              <select name="products[0][product]" class="form-control product-select" onchange="getdpmrprecord(this)" required>
+              <select name="products[0][product]" class="form-control product-select" onchange="getdpmrprecord(this, 0)" required>
                 <option value="">Select</option>
                 <?php foreach($products as $product){ ?>
                   <option value="<?php echo $product->id; ?>"><?php echo $product->name; ?></option>
@@ -57,7 +57,9 @@
 
             <div class="col-md-2">
               <label class="form-label">Quantity</label>
-              <input type="number" name="products[0][quantity]" class="form-control" placeholder="Enter Quantity" value="0" min="0" required>
+              <input type="number" name="products[0][quantity]" class="form-control" 
+                placeholder="Enter Quantity" value="0" min="0" 
+                oninput="multiplydpmrp(0)" required>
             </div>
 
             <div class="col-md-2">
@@ -111,7 +113,7 @@ $(document).ready(function() {
       <div class="row g-3 pl-2" id="productRow${productCount}">
         <div class="col-md-3">
           <label class="form-label">Product Name</label>
-          <select name="products[${productCount}][product]" class="form-control product-select" required>
+          <select name="products[${productCount}][product]" class="form-control product-select" onchange="getdpmrprecord(this, ${productCount})" required>
             <option value="">Select</option>
             <?php foreach($products as $product){ ?>
               <option value="<?php echo $product->id; ?>"><?php echo $product->name; ?></option>
@@ -157,7 +159,48 @@ function removeProductRow(rowId) {
   $(`#productRow${rowId}`).remove();
 }
 
-function getdpmrprecord(selectElement){
+// Fetch DP and MRP prices based on the product selected
+function getdpmrprecord(selectElement, productIndex) {
+    const productId = selectElement.value;
+    if (productId) {
+        $.ajax({
+            url: "<?php echo base_url('admin/getfetchdpmrp'); ?>",  // Ensure this URL is correct
+            method: "POST",
+            data: { productId: productId },  // Send productId in the request
+            success: function(response) {
+                console.log(response); // Inspect the response
+                const data = JSON.parse(response); // Assuming the response is JSON with DP Price and MRP Price data
 
+                // Update DP and MRP fields for the correct row
+                $(`[name="products[${productIndex}][quantity]"]`).val(1);
+                $(`[name="products[${productIndex}][dpprice]"]`).val(data.dpprice);
+                $(`[name="products[${productIndex}][mrpprice]"]`).val(data.mrpprice);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    } else {
+        alert("Please select a valid product.");
+    }
 }
+
+function multiplydpmrp(productIndex) {
+    let quantity = $(`[name="products[${productIndex}][quantity]"]`).val();
+    let dpprice = $(`[name="products[${productIndex}][dpprice]"]`).val();
+    let mrpprice = $(`[name="products[${productIndex}][mrpprice]"]`).val();
+
+    // Convert to numbers
+    quantity = parseFloat(quantity) || 0;
+    dpprice = parseFloat(dpprice) || 0;
+    mrpprice = parseFloat(mrpprice) || 0;
+
+    let dpincrement = dpprice * quantity;
+    let mrpincrement = mrpprice * quantity;
+
+    // Set the updated values
+    $(`[name="products[${productIndex}][dpprice]"]`).val(dpincrement.toFixed(2));
+    $(`[name="products[${productIndex}][mrpprice]"]`).val(mrpincrement.toFixed(2));
+}
+
 </script>

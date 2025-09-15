@@ -1532,4 +1532,19 @@ public function insertProduct($data)
     return $this->db->insert_id();
 }
 
+ public function getProductById($productId)
+    {
+        // Query to get product data from the products table based on productId
+        $this->db->select('dp, mrp');  // Select DP and MRP prices
+        $this->db->from('productinfo');   // Assuming your table name is 'products'
+        $this->db->where('id', $productId);
+        $query = $this->db->get();
+        
+        // Check if product is found
+        if ($query->num_rows() > 0) {
+            return $query->row();  // Return the product data (row)
+        } else {
+            return null;  // Return null if no product found
+        }
+    }
 }

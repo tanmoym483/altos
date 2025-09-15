@@ -140,6 +140,31 @@ public function purchaseform()
     redirect('Dashboard');
 }
 
-   
+public function getfetchdpmrp()
+{
+    // Get the productId from the AJAX request
+    $productId = $this->input->post('productId');
+    
+    // Check if the productId is provided
+    if ($productId) {
+        $productData = $this->modd->getProductById($productId);
+        
+        if ($productData) {
+            // Respond with the DP and MRP prices
+            $response = [
+                'dpprice' => $productData->dp,    // Assuming 'dp' is the column for DP Price
+                'mrpprice' => $productData->mrp   // Assuming 'mrp' is the column for MRP Price
+            ];
+            echo json_encode($response); // Return the data as JSON
+        } else {
+            // If no product data is found, return an error message
+            echo json_encode(['error' => 'Product not found']);
+        }
+    } else {
+        // If no productId is provided, return an error message
+        echo json_encode(['error' => 'Invalid product ID']);
+    }
+}
+
 
 }
