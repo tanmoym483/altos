@@ -25,7 +25,7 @@ date_default_timezone_set('Asia/Kolkata');
 |
 */
 
-$config['base_url'] = 'https://localhost/apmaponjon/';
+$config['base_url'] = 'https://localhost/altos.stoxbiniyog.in/';
 
 
 /*
