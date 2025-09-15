@@ -1,0 +1,406 @@
+<div class="content-wrapper" style="min-height: 2080.26px;">
+    <div id="errorMessage"></div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card m-4">
+                        <section>
+                            <div class="scooter-upload p-2">
+
+
+                                <form action="<?php echo base_url("admin/postaddcustomer") ?>" method="POST" enctype="multipart/form-data">
+
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5 class="card-title">PERSONAL DETAILS</h5>
+                                            <hr>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Member Name <span style="color:#C00">*</span></label>
+                                            <input type="text" class="form-control" name="membarName" id="name" placeholder="Member Name" required="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Mobile <span style="color:#C00">*</span></label>
+                                            <input type="number" class="form-control" name="phone" placeholder="Mobile" id="mobile" required="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Email ID <span style="color:#C00">*</span></label>
+                                            <input type="text" class="form-control" name="email" id="email" placeholder="Email ID" required="">
+                                        </div>
+                                        <br>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label>Mother's Name <span style="color:#C00">*</span></label>
+                                            <input type="text" class="form-control" name="motherName" placeholder="Mother's Name" required="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Father's Name <span style="color:#C00">*</span></label>
+                                            <input type="text" class="form-control" name="fatherName" placeholder="Father's Name" required="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Gender <span style="color:#C00">*</span></label>
+                                            <select class="form-control" name="gender">
+                                                <option>--- Select--- </option>
+                                                <option>Male</option>
+                                                <option>Female</option>
+                                            </select>
+                                        </div>
+
+                                        <!--pattern="[A-Z]{5}[0-10]{4}[A-Z]{1}"-->
+                                        <div class="col-md-3 mb-3">
+                                            <label>PAN No<span style="color:#C00">*</span></label>
+                                            <input type="text" class="form-control PAN" name="panNo" placeholder=" (ABCD1234P)" id="txtPANNumber" oninput="sdnsdjn()" onchange="this.value = this.value.toUpperCase()" maxlength="10" required="">
+                                            <!--oninput="this.value = this.value.toUpperCase()"-->
+                                            <div id="errors" style="color:red"></div>
+                                            <div id="suc" style="color:#32a86d"></div>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label>PAN Upload (310px X 200px) <span style="color:#C00">*</span></label>
+                                            <!-- <input type="file" name="panDo" class="form-control col-xs-8 crop_image" id="upload_image" onClick="panCard()"> -->
+                                            <input type="file" name="panDo" class="form-control col-xs-8 crop_image crop" id="upload_image" onClick="panCard()">
+                                            <input type="text" name="panDoc" id="panDoc" class="form-control col-xs-8" style="display:none">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label>Aadhaar No<span style="color:#C00">*</span></label>
+                                            <input type="number" name="addharNo" class="form-control col-xs-8" placeholder="Aadhaar No" maxlength="12" required="">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label>Aadhaar Front Upload (310px X 200px) <span style="color:#C00">*</span></label>
+                                            <input type="file" name="addharFrontDo" class="form-control col-xs-8 crop_image" id="addharFronts" onClick="addharFront()">
+                                            <input type="text" name="addharFrontDoc" id="addharFrontDoc" class="form-control col-xs-8" style="display:none">
+
+                                        </div>
+
+                                        <div class="col-md-3 mb-3">
+                                            <label>Aadhaar Back Upload (310px X 200px)<span style="color:#C00">*</span></label>
+                                            <input type="file" name="addharBackDo" class="form-control col-xs-8 crop_image" id="AddharBacks" onClick="AddharBack()">
+                                            <input type="text" name="addharBackDoc" id="addharBackDoc" class="form-control col-xs-8" style="display:none">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label>PIN Code <span style="color:#C00">*</span></label>
+                                            <input name="postcode" placeholder="PIN Code" type="number" maxlength="10" id="pincode" class="form-control" required="">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label>District <span style="color:#C00">*</span></label>
+                                            <input placeholder="District" type="text" name="district" value="" id="district" class="form-control" required="">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label>State <span style="color:#C00">*</span></label>
+                                            <input placeholder="State" type="text" name="state" value="" id="states" class="form-control" required="">
+                                        </div>
+                                        <!-- <div class="col-md-4 mb-3">-->
+                                        <!--    <label>Password <span style="color:#C00">*</span></label>-->
+                                        <!--    <input placeholder="District" type="password" name="password" class="form-control"  placeholder="Password" required>-->
+                                        <!--</div>-->
+                                        <br>
+                                        <div class="col-md-12">
+                                            <h5 class="card-title">NOMINEE DETAILS</h5>
+                                            <hr>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label>Nominee Name <span style="color:#C00">*</span></label>
+                                            <input type="text" name="nomineeName" class="form-control" placeholder="Nominee Name" required="">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label>Relation with Nominee <span style="color:#C00">*</span></label>
+                                            <input type="text" name="nomineeRelation" class="form-control" placeholder="Relation with Nominee" required="">
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <h5 class="card-title">BANK DETAILS</h5>
+                                            <hr>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>IFSC Code <span style="color:#C00">*</span></label>
+                                            <input type="text" class="form-control" name="ifscCode" placeholder="IFSC Code" required="" oninput="ifcscode()" id="ifcscodeId">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Bank Name <span style="color:#C00">*</span></label>
+                                            <input type="text" class="form-control" name="bankName" placeholder="Bank Name" id="bankName" required="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Branch <span style="color:#C00">*</span></label>
+                                            <input type="text" name="branchName" id="branchName" class="form-control" placeholder="Branch" required="">
+                                        </div>
+                                        <br>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label>A/C Type <span style="color:#C00">*</span></label>
+                                            <select class="form-control" name="accountType">
+                                                <option>Select</option>
+                                                <option value="current">Current</option>
+                                                <option value="savings">Savings </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>A/C Holder Name <span style="color:#C00">*</span></label>
+                                            <input type="text" name="accountHolderName" class="form-control" placeholder="A/C Holder Name" required="">
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label>A/C Number <span style="color:#C00">*</span></label>
+                                            <input type="text" name="accountNumber" class="form-control" placeholder="A/C Number" required="">
+                                        </div>
+
+
+                                        <div class="col-md-4 mb-3">
+                                            <label>Passbook/Cancelled Cheque/Statement Upload (310px X 200px) <span style="color:#C00">*</span></label>
+                                            <input type="file" name="accountProvedDo" class="form-control col-xs-8 crop_image" id="passbokks" onClick="passbookse()">
+                                            <input type="text" name="accountProvedDoc" id="accountProvedDoc" class="form-control col-xs-8" style="display:none">
+                                        </div>
+                                    
+                                        <div class="col-md-4 mb-3">
+                                            <label>Signature <span style="color:#C00">*</span></label>
+                                            <input type="file" name="signatur" class="form-control col-xs-8 crop_image" id="signatureImage" onClick="signat()">
+                                            <input type="text" name="signature" id="signature" class="form-control col-xs-8" style="display:none">
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label>Customar Image (310px X 200px) <span style="color:#C00">*</span></label>
+                                            <input type="file" name="pi" class="form-control col-xs-8 crop_image" id="customarImg" onClick="customar()">
+                                            <input type="text" name="pic" id="pic" class="form-control col-xs-8" style="display:none">
+                                            <?php echo form_error('pic'); ?>
+                                        </div>
+                                        <div class="col-md-12 mb-6">
+                                            <label><input type="checkbox" value="yes" name="Terms_and_condition"> I agree to the <a href="#" target="_blank"><span>Terms &amp; Conditions</span></a> </label>
+                                        </div>
+                                        <br>
+
+                                        <input type="hidden" name="userId" value="" id="userId">
+                                        <input type="hidden" name="parentId" value="" id="parentId">
+                                        <div class="col-md-12 mb-6">
+                                        <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </form>
+                            </div>
+
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Cropper -->
+<div class="modal fade" id="my_cropper_modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image Before Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img src="" id="cropper_img" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="my_cropper_btn" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- pan card -->
+<div class="modal fade" id="modal_crop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image Before Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <img src="" id="sample_image" />
+                        </div>
+                        <!-- <div class="col-md-4">
+                            <div class="preview"></div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="crop_and_upload" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end pan card -->
+
+<!-- adhar -->
+<div class="modal fade" id="modal_crops" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image Before Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="" id="sample_images" />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="crop_and_uploads" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end adhar -->
+
+
+<!-- adhar back-->
+<div class="modal fade" id="modal_crops_adhar_back" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image Before Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="" id="adharfornt" />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="crop_and_upload_adhar_back" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end adhar back-->
+
+<!-- passbooks strnatcasecmp -->
+<div class="modal fade" id="modal_crops_passbook" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image Before Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="" id="passbookse" />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="crop_and_upload_passbook" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end passbooks -->
+
+<!-- signture start -->
+<div class="modal fade" id="modal_crops_sig" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image Before Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="" id="signat" />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="crop_and_upload_sig" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end signature -->
+
+<!-- image start -->
+<div class="modal fade" id="modal_crops_pic" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Image Before Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <img src="" id="customars" />
+                        </div>
+                        <div class="col-md-4">
+                            <div class="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="crop_and_upload_pic" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end image -->

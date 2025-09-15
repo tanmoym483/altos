@@ -1,0 +1,27 @@
+.error {
+  color: #f00000 !important;
+}
+/* .cropper-canvas {
+  width: 500px;
+} */
+/* .preview img,
+.cropper-canvas img {
+  width: 100% !important;
+} */
+.img-container img {
+  width: auto;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* .img-container .preview {
+  overflow: hidden;
+  width: 160px;
+  height: 160px;
+  margin: 10px;
+  border: 1px solid red;
+} */
+
+/* .modal-lg {
+  max-width: 1000px !important;
+} */

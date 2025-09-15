@@ -1,0 +1,240 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="<?php echo site_url('dashboard'); ?>" class="brand-link">
+    <img src="<?php echo base_url('assets/images/logo.png'); ?>" alt="Stox Logo" class="  elevation-3" style="opacity: .8; width:100%">
+    <!-- <span class="brand-text font-weight-light">Stox</span> -->
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex"> -->
+    <!-- <div class="image">
+                <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            </div> -->
+    <!-- <div class="info">
+                <a href="#" class="d-block">Alexander Pierce</a>
+            </div> -->
+    <!-- </div> -->
+
+
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+        <li class="nav-item menu-open">
+          <a href="<?php echo site_url('dashboard') ?>" class="nav-link <?php if ($this->uri->segment(1) == "dashboard") {
+                                                                          echo 'active';
+                                                                        } ?>">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Dashboard
+              <!-- <i class="right fas fa-angle-left"></i> -->
+            </p>
+          </a>
+          <!-- <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="./index.html" class="nav-link active">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Dashboard v1</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./index2.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Dashboard v2</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./index3.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Dashboard v3</p>
+                            </a>
+                        </li>
+                    </ul> -->
+        </li>
+        <?php if ($this->session->role == 'superAdmin' || $this->session->role == 'admin') { ?>
+          <li class="nav-item menu-open">
+            <a href="<?php echo site_url('bdo') ?>" class="nav-link <?php if ($this->uri->segment(1) == "bdo") {
+                                                                      echo 'active';
+                                                                    } ?>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                BDO
+                <!-- <i class="right fas fa-angle-left"></i> -->
+              </p>
+            </a>
+
+          </li>
+        <?php } ?>
+
+
+        <li class="nav-item">
+          <a href="#" class="nav-link <?php if ($this->uri->segment(1) == "users") {
+                                        echo 'active';
+                                      } ?>">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>
+              User Management
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?php echo base_url('users') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>User List</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('users/add') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>User Add</p>
+              </a>
+            </li>
+            <?php if ($this->session->role == 'superAdmin') { ?>
+              <li class="nav-item">
+                <a href="<?php echo base_url('users/adminusers') ?>" class="nav-link  <?php if ($this->uri->segment(0) == "adminusers") {
+                                                                                        echo 'active';
+                                                                                      } ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Admin users</p>
+                </a>
+              </li>
+            <?php } ?>
+            <li class="nav-item">
+              <a href="<?php echo base_url('users/tree') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Tree</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>
+              Fund Management
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?php echo base_url('users/addfund') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add Fund</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('users/payemntHistory') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Transaction History</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+        <?php if ($_SESSION['role'] === "superAdmin") { ?>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                All Management
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?php echo base_url('admin') ?>" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Pincode </p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="<?php echo base_url('admin/ifcsCodeView') ?>" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add IFSC Code</p>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+        
+        <li class="nav-item">
+          <a href="<?php echo base_url('admin/commision') ?>" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>
+            Commision Management
+              
+            </p>
+          </a>
+        </li><?php } ?>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>
+              Customer Management
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<?php echo base_url('admin/customer_add') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Customer add</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>
+              Service Management
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+          <?php if ($_SESSION['role'] === "superAdmin") { ?>
+            <li class="nav-item">
+              <a href="<?php echo base_url('admin/service_add') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Add Service</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('admin/serviceView') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Service List</p>
+              </a>
+            </li>
+            <?php } ?>
+            <li class="nav-item">
+              <a href="<?php echo base_url('admin/serviceform') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Service Form</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?php echo base_url('admin/serviceuserview') ?>" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Service User List</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,410 @@
+$(function () {
+  // alert("ok");
+});
+
+function ajax_bdo_status_change(userId, status) {
+  $.ajax({
+    url: base_url + "users/userRegistrationStatusUpdate",
+    method: "POST",
+    data: {
+      userId: userId,
+      status: status,
+    },
+    success: function (data) {
+      console.log("data", data);
+      window.location.reload();
+    },
+    error: function (error) {
+      console.log("error", error);
+    },
+  });
+}
+function ajax_service_status_change(serviceid, status) {
+  $.ajax({
+    url: base_url + "admin/serviceStatusChange",
+    method: "POST",
+    data: {
+      serviceid: serviceid,
+      status: status,
+    },
+    success: function (data) {
+      console.log("data", data);
+      window.location.reload();
+    },
+    error: function (error) {
+      console.log("error", error);
+    },
+  });
+}
+function approveDocumentSubmit(transaction){
+  $.ajax({
+    url: base_url + "users/approvemodal",
+    method: "POST",
+    data: {
+      transaction: transaction,
+    },
+    success: function (data) {
+            var myArray = JSON.parse(data);
+     
+     $('#transction_id').val(myArray[0].id);
+     $('#withdraw_amount').val(myArray[0].amount);
+     $('#openapprove').modal('show');
+    },
+    error: function (error) {
+      console.log("error", error);
+    },
+  });
+}
+function ajax_payment_status_change(userId, status) {
+  console.log(userId, status);
+  $.ajax({
+    url: base_url + "users/userPaymentStatusUpdate",
+    method: "POST",
+    data: {
+      userId: userId,
+      status: status,
+    },
+    success: function (data) {
+      console.log("data", data);
+      window.location.reload();
+    },
+    error: function (error) {
+      console.log("error", error);
+    },
+  });
+}
+
+function intrFunction() {
+  var sopnsercode = $("#sopnsercode").val();
+
+  $.ajax({
+    url: base_url + "users/introcode" + "/" + sopnsercode,
+    type: "GET",
+    success: function (response) {
+      const arrayValue = JSON.parse(response);
+      
+      if (arrayValue[0].leftChild !== null) {
+        $("#leftval").hide();
+        console.log("left");
+      }
+      if (arrayValue[0].rightChild !== null) {
+        $("#rightval").hide();
+        console.log("right");
+      }
+      if (arrayValue[0].rightChild == null || arrayValue[0].leftChild == null) {
+        $("#sideValue").show();
+      }
+
+      if (arrayValue[0].role != "superAdmin") {
+        $("#sideValue").show();
+      } else {
+        $("#sideValue").hide();
+      }
+      if (arrayValue.length == 0) {
+        console.log("error part");
+        $("#SponsorName").val("").prop("readonly", false);
+
+        $("#errorMessage").html(
+          `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+        );
+      } else {
+        var sponser = JSON.parse(response)[0];
+        var membarName = sponser.firstName + ' ' +sponser.lastName;
+        console.log(sponser); debugger;
+        $("#SponsorName").val(membarName).prop("readonly", true);
+        $("#errorMessage").html("");
+        $("#parentId").val(sponser.id);
+      }
+    },
+    error: function (data) {
+      $("#name").val("");
+      $("#errorMessage").html(
+        `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+      );
+    },
+  });
+}
+function vregintrFunction(){
+  var customercode = $("#customercode").val();
+  $("#cuserId").val();
+  $.ajax({
+    url: base_url + "users/vintrocode" + "/" + customercode,
+    type: "GET",
+    success: function (response) {
+      const arrayValue = JSON.parse(response);
+      console.log("==========", arrayValue[0].id);
+      if (arrayValue.length == 0) {
+        console.log("error part");
+        $("#customercode").val("").prop("readonly", false);
+
+        $("#errorMessage").html(
+          `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+        );
+      } else {
+        console.log("error part");
+        var sponser = JSON.parse(response)[0];
+        $("#vuserId").val(sponser.createdBy);
+        $("#cuserId").val(sponser.id);
+        $("#vsopnsercode").val(sponser.regId);
+      }
+    },
+    error: function (data) {
+      $("#name").val("");
+      $("#errorMessage").html(
+        `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+      );
+    },
+  });
+}
+function regintrFunction() {
+  var sopnsercode = $("#sopnsercode").val();
+
+  $.ajax({
+    url: base_url + "users/introcode" + "/" + sopnsercode,
+    type: "GET",
+    success: function (response) {
+      const arrayValue = JSON.parse(response);
+      console.log("==========", arrayValue[0].id);
+      if (arrayValue.length == 0) {
+        console.log("error part");
+        $("#SponsorName").val("").prop("readonly", false);
+
+        $("#errorMessage").html(
+          `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+        );
+      } else {
+        console.log("error part");
+        var sponser = JSON.parse(response)[0];
+        $("#userId").val(sponser.id);
+      }
+    },
+    error: function (data) {
+      $("#name").val("");
+      $("#errorMessage").html(
+        `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+      );
+    },
+  });
+}
+
+function ifcscode() {
+  var ifccodeNumber = $("#ifcscodeId").val();
+  $.ajax({
+    url: base_url + "users/ifcsCode" + "/" + ifccodeNumber,
+    type: "GET",
+    success: function (response) {
+      const arrayValue = JSON.parse(response)[0];
+      $("#bankName").val(arrayValue.bank_name).prop("readonly", false);
+      $("#branchName").val(arrayValue.branch).prop("readonly", false);
+    },
+  });
+}
+
+function registerOn() {
+  var bdoregisterId = $("#bdoregisterId").val();
+  $.ajax({
+    url: base_url + "users/introcode" + "/" + bdoregisterId,
+    type: "GET",
+    success: function (response) {
+      console.log("++++++", JSON.parse(response));
+      const arrayValue = JSON.parse(response);
+      console.log(arrayValue.length);
+      if (arrayValue.length == 0) {
+        console.log("error part");
+        $("#name").val(membarName).prop("readonly", false);
+        $("#mobile").val("").prop("readonly", false);
+        $("#email").val("").prop("readonly", false);
+        $("#District").val("").prop("readonly", false);
+
+        $("#errorMessage").html(
+          `<div class="alert alert-danger">BDO RegistionId Not Found</div>`
+        );
+      } else {
+        var membarName =
+          JSON.parse(response)[0].firstName + ' ' + JSON.parse(response)[0].lastName;
+        console.log("membar name", membarName);
+        $("#name").val(membarName).prop("readonly", true);
+        $("#errorMessage").html("");
+        $("#mobile").val(JSON.parse(response)[0].phone).prop("readonly", true);
+        $("#errorMessage").html("");
+        $("#email").val(JSON.parse(response)[0].email).prop("readonly", true);
+        $("#errorMessage").html("");
+        $("#District").val(JSON.parse(response)[0].city).prop("readonly", true);
+        $("#errorMessage").html("");
+        $("#userId").val(JSON.parse(response)[0].id).prop("readonly", true);
+        $("#errorMessage").html("");
+        $("#pincode")
+          .val(JSON.parse(response)[0].postcode)
+          .prop("readonly", true);
+        $("#errorMessage").html("");
+
+        $("#states").val(JSON.parse(response)[0].state).prop("readonly", true);
+        $("#errorMessage").html("");
+      }
+    },
+    error: function (data) {
+      $("#name").val("");
+      $("#errorMessage").html(
+        `<div class="alert alert-danger">BDO RegistionId Not Found</div>`
+      );
+    },
+  });
+}
+
+function paymentEdit(id) {
+  // console.log(id)
+  $("#paymentId").val(id);
+  $.ajax({
+    url: base_url + "Auth/paymentUpdate" + "/" + id,
+    type: "GET",
+    success: function (response) {
+      console.log(response);
+      const arrayValue = JSON.parse(response);
+      var sponser = JSON.parse(response)[0];
+      $("#userId").val(sponser.userId);
+      
+      $("#amount").val(sponser.amount);
+      $("#transType").val(sponser.transType);
+      $("#transRefNo").val(sponser.transRefNo);
+      $("#transRefDoc").val(sponser.transRefDoc);
+      
+    },
+    error: function (data) {
+      $("#name").val("");
+      $("#errorMessage").html(
+        `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+      );
+    },
+  });
+}
+function postcodeDynamic() {
+  var pinId = $("#typePasswordX").val();
+  $.ajax({
+    url: "Auth/postalCode" + "/" + pinId,
+    type: "GET",
+    success: function (response) {
+      console.log(response);
+      const arrayValue = JSON.parse(response);
+      var sponser = JSON.parse(response)[0];
+      $("#typePasswordXz").val(sponser.district);
+      $("#state").val(sponser.state);
+    },
+    error: function (data) {
+      $("#name").val("");
+      $("#errorMessage").html(
+        `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+      );
+    },
+  });
+}
+
+function userdetailsUpdate(userId) {
+  $.ajax({
+    url: base_url + "Auth/edituserDetails" + "/" + userId,
+    type: "GET",
+    success: function (response) {
+      console.log(response);
+      const arrayValue = JSON.parse(response);
+      var sponser = JSON.parse(response)[0];
+      $("#userId").val(sponser.id);
+      $("#firstName-2").val(sponser.firstName);
+      $("#middleName-2").val(sponser.middleName);
+      $("#lastName-2").val(sponser.lastName);
+      $("#email-2").val(sponser.email);
+      $("#phone-2").val(sponser.phone);
+      $("#city-2").val(sponser.city);
+      $("#state").val(sponser.state);
+      $("#postcode-2").val(sponser.postcode);
+      $("#address-2").val(sponser.address);
+      // $("#transRefNo-2").val(sponser.transRefNo)
+    },
+    error: function (data) {
+      $("#name").val("");
+      $("#errorMessage").html(
+        `<div class="alert alert-danger">Sponser Code  Not Found</div>`
+      );
+    },
+  });
+}
+// function upperCase() {
+//     console.log('hello')
+//   const x = document.getElementById("txtPANNumber");
+//   x.val().toUpperCase();
+// }
+function sdnsdjn() {
+  var regExp = /[a-zA-z]{5}\d{4}[a-zA-Z]{1}/;
+  var txtpan = $("#txtPANNumber").val().toUpperCase();
+  if (txtpan.length == 10) {
+    if (txtpan.match(regExp)) {
+      $("#errors").html("");
+      $("#suc").html("Pan card Number  Match");
+      event.preventDefault();
+      console.log("Pan card Number  Match");
+    } else {
+      $("#suc").html("");
+      $("#errors").html("Invalid Pan Card Number");
+      event.preventDefault();
+      //   console.log("pan card not match")
+    }
+  } else {
+    if (txtpan.length == 10) {
+      $("#errors").append("Invalid Pan Card Number");
+      event.preventDefault();
+      console.log("Invalid Pan Card Number");
+    }
+  }
+}
+function cancels() {
+  $(".btn1").click(function () {
+    $("p").hide();
+  });
+}
+function cancels() {
+  $(".fade").hide();
+  location.reload();
+}
+
+(function generateBDOPdf() {
+  $(document).ready(() => {
+    $("#gen_bdo_pdf").click((e) => {
+      e.preventDefault();
+      console.log("gen_bdo_pdf click");
+      const url = new URL(window.location.href);
+      const urlParams = new URLSearchParams(window.location.search);
+      var a = document.createElement("a");
+      a.setAttribute("href", baseUrl + "bdo/pdf" + url.search);
+      a.setAttribute("target", "_blank");
+      a.click();
+    });
+  });
+})();
+
+(function generateuserAdmin() {
+  $(document).ready(() => {
+    $("#gen_user_admin_pdf").click((e) => {
+      e.preventDefault();
+      console.log("gen_bdo_pdf click");
+      const url = new URL(window.location.href);
+      const urlParams = new URLSearchParams(window.location.search);
+      var a = document.createElement("a");
+      a.setAttribute("href", baseUrl + "Users/adminUserPdf" + url.search);
+      a.setAttribute("target", "_blank");
+      a.click();
+    });
+  });
+})();
+
+(function userlistPdfGenaret() {
+  $(document).ready(() => {
+    $("#gen_user_list_pdf").click((e) => {
+      e.preventDefault();
+      console.log("gen_bdo_pdf click");
+      const url = new URL(window.location.href);
+      const urlParams = new URLSearchParams(window.location.search);
+      var a = document.createElement("a");
+      a.setAttribute("href", baseUrl + "Users/userlistPdf" + url.search);
+      a.setAttribute("target", "_blank");
+      a.click();
+    });
+  });
+})();

@@ -1,0 +1,246 @@
+<?php
+class Transaction_model extends CI_Model
+{
+
+    public $table_name = "transactions";
+
+    public $userId;
+    public $amount;
+    public $transType;
+    public $transRefNo;
+    public $transRefDoc;
+    public $createdAt;
+    public $updatedAt;
+    public $createdBy;
+    public $updatedBy;
+    public $status;
+
+    public function createTransaction($data)
+    {
+        
+        $insertData = [
+            'createdAt' => date('Y-m-d h:i:s'),
+        ];
+        
+        if (array_key_exists('amount', $data))
+            $insertData['amount'] = $data['amount'];
+        if (array_key_exists('status', $data))
+            $insertData['status'] = $data['status'];
+        if (array_key_exists('transRefNo', $data))
+            $insertData['transRefNo'] = $data['transRefNo'];
+        if (array_key_exists('transRefDoc', $data))
+            $insertData['transRefDoc'] = $data['transRefDoc'];
+        if (array_key_exists('userId', $data)) {
+            $insertData['userId'] = $data['userId'];
+            
+        }
+        $insertData['createdBy'] = $data['createdBy'];
+        if (array_key_exists('transType', $data))
+            $insertData['transType'] = $data['transType'];
+        // if (array_key_exists('customer_id', $data))
+        //     $insertData['customer_id'] = $data['userId'];
+        $this->db->insert($this->table_name, $insertData);
+    }
+
+    public function updateTransection($userId,$data)
+    {
+        $insertData=[];
+        if (array_key_exists('amount', $data))
+        $insertData['amount'] = $data['amount'];
+    if (array_key_exists('transRefNo', $data))
+        $insertData['transRefNo'] = $data['transRefNo'];
+    if (array_key_exists('transRefDoc', $data))
+        $insertData['transRefDoc'] = $data['transRefDoc'];
+        
+        $this->db->from($this->table_name)
+        ->where('id',$userId)
+        ->set(
+            $insertData
+        )
+        ->update();
+    }
+    public function dematamount($id){
+        $query = $this->db->select('SUM(amount) as amount')
+            ->from('transactions')
+            ->where('transactions.userId', $id)
+            ->where('transactions.transType', 'demat')
+            ->where('transactions.status', 'approved')
+            ->group_by('transactions.userId')
+            ->get();
+        return $query->result_array();
+    }
+    public function withdrawamount($id){
+        $query = $this->db->select('SUM(amount) as amount')
+            ->from('transactions')
+            ->where('transactions.userId', $id)
+            ->where('transactions.transType', 'withdraw')
+            ->where('transactions.status', 'approved')
+            ->group_by('transactions.userId')
+            ->get();
+        return $query->result_array();
+    }
+    public function bonusamount($id){
+        $query = $this->db->select('SUM(amount) as amount')
+            ->from('transactions')
+            ->where('transactions.userId', $id)
+            ->where('transactions.transType', 'bonus')
+            ->where('transactions.status', 'approved')
+            ->group_by('transactions.userId')
+            ->get();
+        return $query->result_array();
+    }
+    public function updatedocument($data){
+        $insertData=[];
+        
+    if (array_key_exists('transRefNo', $data))
+        $insertData['transRefNo'] = $data['transRefNo'];
+    if (array_key_exists('transRefDoc', $data))
+        $insertData['transRefDoc'] = $data['transRefDoc'];
+        $insertData['status'] = 'approved';
+        $this->db->from($this->table_name)
+        ->where('id',$data['transction_id'])
+        ->set(
+            $insertData
+        )
+        ->update();
+    }
+     public function userRegistrationStatusUpdate($userId, $status)
+    {
+        try {
+            $updateData =  [
+                'status' => $status,
+                'updatedAt' => date('Y-m-d h:i:s'),
+                'updatedBy' => $this->session->userdata('userId')
+            ];
+
+
+            $this->db->from($this->table_name)
+                ->where('userId', $userId)
+                ->set(
+                    $updateData
+                )
+                ->update();
+        } catch (Exception $e) {
+            print_r($e);
+        }
+    }
+    
+    public function customerTranctionlistid($id){
+        $this->db->select('transactions.*,transactions.status as tstatus,users.*,createduser.firstName as cfirstName, createduser.regId as cregId, createduser.lastName as clastName')
+                ->from('users')
+                ->join('transactions','transactions.userId = users.id' , 'left')
+                ->join('users as createduser','createduser.id = transactions.createdBy' , 'left')
+                ->where('transactions.userId',$id);
+        $data = $this->db->get();
+        return $data->result();
+    }
+    public function withdrawhistoryDeails($search)
+    {
+       
+        $this->db->select('withdraw.*, users.*,withdraw.status as tstatus,withdraw.id as tid,createduser.firstName as cfirstName, createduser.regId as cregId, createduser.lastName as clastName')
+            ->from('users')
+            ->join('transactions as withdraw','withdraw.userId = users.id' , 'left')
+            ->join('users as createduser','createduser.id = withdraw.createdBy' , 'left')
+            ->where('withdraw.transType','withdraw');
+            if($search !==null){
+                $this->db->where('users.regId',$search);
+            }
+            $data = $this->db->get();
+            return $data->result();
+      
+    }
+    public function demathistoryDeails($search)
+    {
+       
+        $this->db->select('transactions.*,users.*,transactions.status as tstatus,transactions.id as tid,createduser.firstName as cfirstName, createduser.regId as cregId, createduser.lastName as clastName')
+            ->from('users')
+            ->join('transactions','transactions.userId = users.id' , 'left')
+            ->join('users as createduser','createduser.id = transactions.createdBy' , 'left')
+            ->where('transactions.transType','demat');
+            if($search !==null){
+                $this->db->where('users.regId',$search);
+            }
+            $data = $this->db->get();
+            return $data->result();
+      
+    }
+    public function historyDeails($role,$search)
+    {
+       $userId = $this->session->userdata('userId');
+        // if ($role == "vendor") {
+        //     $this->db->select('transactions.*,transactions.status as tstatus')
+        //         ->from($this->table_name)
+        //         ->where('createdBy', $userId)
+        //         ->where('transactions.transType','deposite');
+        //     $data = $this->db->get();
+        //     return $data->result();
+            
+        // } else {
+            
+            $this->db->select('transactions.*,users.*,transactions.status as tstatus,transactions.id as tid,createduser.firstName as cfirstName, createduser.regId as cregId, createduser.lastName as clastName')
+                ->from('users')
+                ->join('transactions','transactions.userId = users.id' , 'left')
+                ->join('users as createduser','createduser.id = transactions.createdBy' , 'left')
+                ->where('transactions.transType','deposite');
+                if ($role == "vendor") {
+                    $this->db->where('transactions.createdBy', $userId);
+                }
+                 if($search !==null){
+                 $this->db->where('users.regId',$search);
+              
+                 }
+
+                
+                if($search ==null){
+            // $this->db->select('*')
+            //     ->from('users')
+            //     ->join('transactions','transactions.userId = users.id')
+            //     ->where('transactions.transType','deposite')
+            //     ->where('users.regId','SBI91298127');
+            //     $dat = $this->db->get();
+            // //   return $dat->result();
+            //   print_r($dat->result());die;
+                }else{
+                    
+                }
+            $data = $this->db->get();
+            return $data->result();
+       // }
+    }
+    public function gettransactionbyId($id){
+        $query = $this->db->select('*')
+            ->from('transactions')
+            ->where('transactions.id', $id)
+            ->get();
+        return $query->result();
+    }
+    public function getUser($username)
+    {
+      
+        $query = $this->db->select('*')
+            ->from('users')
+            ->join('transactions','transactions.userId = users.id' , 'right')
+            ->where('transactions.id', $username)
+            ->get();
+        return $query->result();
+    }
+    public function userPaymentStatusUpdate($userId, $status)
+    {
+        try {
+            $updateData =  [
+                'status' => $status,
+                'updatedAt' => date('Y-m-d h:i:s'),
+                'updatedBy' => $this->session->userdata('userId')
+            ];
+
+            $this->db->from($this->table_name)
+                ->where('id', $userId)
+                ->set(
+                    $updateData
+                )
+                ->update();
+        } catch (Exception $e) {
+            print_r($e);
+        }
+    }
+}

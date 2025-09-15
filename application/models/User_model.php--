@@ -1,0 +1,602 @@
+<?php
+class User_model extends CI_Model
+{
+
+    public $table_name = "users";
+    public $transactions_table = "transactions";
+
+    public $firstName;
+    public $middleName;
+    public $lastName;
+    public $email;
+    public $password;
+    public $phone;
+    public $countryCode;
+    public $city;
+    public $district;
+    public $state;
+    public $postcode;
+    public $address;
+    public $parentNode;
+    public $leftChild;
+    public $rightChild;
+    public $regId;
+    public $pic;
+    public $createdAt;
+    public $updatedAt;
+    public $createdBy;
+    public $updatedBy;
+    public $status;
+    public $isFirstLogin;
+
+    public function createUser($data)
+    {
+        $insertData = ['role' => 'vendor'];
+        if (array_key_exists('firstName', $data))
+            $insertData['firstName'] = $data['firstName'];
+        if (array_key_exists('middleName', $data))
+            $insertData['middleName'] = $data['middleName'];
+        if (array_key_exists('lastName', $data))
+            $insertData['lastName'] = $data['lastName'];
+        if (array_key_exists('email', $data))
+            $insertData['email'] = $data['email'];
+        if (array_key_exists('password', $data))
+            $insertData['password'] = md5($data['password']);
+        if (array_key_exists('phone', $data))
+            $insertData['phone'] = $data['phone'];
+        if (array_key_exists('countryCode', $data))
+            $insertData['countryCode'] = $data['countryCode'];
+        if (array_key_exists('city', $data))
+            $insertData['city'] = $data['city'];
+        if (array_key_exists('district', $data))
+            $insertData['district'] = $data['district'];
+        if (array_key_exists('state', $data))
+            $insertData['state'] = $data['state'];
+        if (array_key_exists('postcode', $data))
+            $insertData['postcode'] = $data['postcode'];
+        if (array_key_exists('address', $data))
+            $insertData['address'] = $data['address'];
+        if (array_key_exists('regId', $data))
+            $insertData['regId'] = $data['regId'];
+        if (array_key_exists('pic', $data))
+            $insertData['pic'] = $data['pic'];
+        if (array_key_exists('isFirstLogin', $data))
+            $insertData['isFirstLogin'] = $data['isFirstLogin'];
+        if (array_key_exists('role', $data))
+            $insertData['role'] = $data['role'];
+        if (array_key_exists('status', $data))
+            $insertData['status'] = $data['status'];
+        $insertData['createdAt'] = date('Y-m-d h:i:s');
+        $insertData['createdBy'] = $this->session->userdata('userId');
+        $this->db->insert($this->table_name, $insertData);
+    }
+
+
+
+    public function updateUser($data)
+    {
+        $insertData = [];
+        if (array_key_exists('role', $data))
+            $insertData = ['role' => 'vendor'];
+        if (array_key_exists('firstName', $data))
+            $insertData['firstName'] = $data['firstName'];
+        if (array_key_exists('middleName', $data))
+            $insertData['middleName'] = $data['middleName'];
+        if (array_key_exists('lastName', $data))
+            $insertData['lastName'] = $data['lastName'];
+        if (array_key_exists('email', $data))
+            $insertData['email'] = $data['email'];
+        if (array_key_exists('password', $data))
+            $insertData['password'] = md5($data['password']);
+        if (array_key_exists('phone', $data))
+            $insertData['phone'] = $data['phone'];
+        if (array_key_exists('countryCode', $data))
+            $insertData['countryCode'] = $data['countryCode'];
+        if (array_key_exists('city', $data))
+            $insertData['city'] = $data['city'];
+        if (array_key_exists('district', $data))
+            $insertData['district'] = $data['district'];
+        if (array_key_exists('state', $data))
+            $insertData['state'] = $data['state'];
+        if (array_key_exists('postcode', $data))
+            $insertData['postcode'] = $data['postcode'];
+        if (array_key_exists('address', $data))
+            $insertData['address'] = $data['address'];
+        if (array_key_exists('regId', $data))
+            $insertData['regId'] = $data['regId'];
+        if (array_key_exists('pic', $data))
+            $insertData['pic'] = $data['pic'];
+        if (array_key_exists('isFirstLogin', $data))
+            $insertData['isFirstLogin'] = $data['isFirstLogin'];
+        if (array_key_exists('role', $data))
+            $insertData['role'] = $data['role'];
+        if (array_key_exists('parentNode', $data))
+            $insertData['parentNode'] = $data['parentNode'];
+        if (array_key_exists('leftChild', $data))
+            $insertData['leftChild'] = $data['leftChild'];
+        if (array_key_exists('rightChild', $data))
+            $insertData['rightChild'] = $data['rightChild'];
+        if (array_key_exists('side', $data))
+            $insertData['side'] = $data['side'];
+        if (array_key_exists('status', $data))
+            $insertData['status'] = $data['status'];
+        if (array_key_exists('fatherName', $data))
+            $insertData['fatherName'] = $data['fatherName'];
+        if (array_key_exists('motherName', $data))
+            $insertData['motherName'] = $data['motherName'];
+        if (array_key_exists('gender', $data))
+            $insertData['gender'] = $data['gender'];
+        if (array_key_exists('Mother_Name', $data))
+            $insertData['Mother_Name'] = $data['Mother_Name'];
+        $insertData['createdBy'] = $this->session->userdata('userId');
+        $this->db->from($this->table_name)
+            ->where('id', $data['userId'])
+            ->set(
+                $insertData
+            )
+            ->update();
+    }
+
+    public function getUsers($search = "", $page = 1, $limit = 10, $other = [])
+    {
+        // print_r($other);die;
+        //    echo $search ;die;
+        $select = 'users.*';
+
+        if (array_key_exists('trans', $other) && $other['trans']) {
+            $select .= ',trans.transRefNo,transRefDoc';
+        }
+        if (array_key_exists('kyc', $other) && $other['kyc'])
+            $select .= ',kyc.panNo,panDoc,addharNo,addharFrontDoc,addharBackDoc';
+        $this->db->select($select)
+            ->from($this->table_name);
+        $this->db->where('role!=', 'superAdmin');
+
+
+        if ($search !== null) {
+            $this->db->where('email', $search)
+                ->or_where('regId', $search);
+            // ->or_where("firstName LIKE '%'.$search.'%'");
+        }
+
+        if (((array_key_exists('to', $other) && $other['to'])) && (array_key_exists('from', $other) && $other['from'])) {
+            // $this->db->where('users.createdAt BETWEEN "' . date('Y-m-d', strtotime($other['from'])) . '" and "' . date('Y-m-d', strtotime($other['to'])) . '"');
+            $this->db->where('users.createdAt >=', date('Y-m-d', strtotime($other['from'])));
+            $this->db->where('users.createdAt <=', date('Y-m-d', strtotime($other['to'] . " +1 days")));
+        }
+        if (array_key_exists('trans', $other) && $other['trans']) {
+            $this->db->join('transactions as trans', 'trans.userId=users.id AND trans.transType="registration"');
+        }
+        if (array_key_exists('kyc', $other) && $other['kyc'])
+            $this->db->join('user_kyc as kyc', 'kyc.userId=users.id');
+
+        $this->db->order_by('users.id', 'DESC');
+
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getMembers($search = "", $page = 1, $limit = 10, $other = [])
+    {
+        $select = 'users.*';
+        if (array_key_exists('trans', $other) && $other['trans']) {
+            $select .= ',trans.transRefNo,transRefDoc';
+        }
+        if (array_key_exists('kyc', $other) && $other['kyc'])
+            $select .= ',kyc.panNo,panDoc,addharNo,addharFrontDoc,addharBackDoc';
+        $this->db->select($select)
+            ->from($this->table_name);
+        $this->db->where('role!=', 'superAdmin');
+        $this->db->where('status', 'approved');
+
+        if ($search !== '') {
+            $this->db->where('email', $search)
+                ->or_where('regId', $search)
+                ->or_where("firstName LIKE '%'.$search.'%'");
+        }
+        if (array_key_exists('trans', $other) && $other['trans']) {
+            $this->db->join('transactions as trans', 'trans.userId=users.id AND trans.transType="registration"');
+        }
+        if (array_key_exists('kyc', $other) && $other['kyc'])
+            $this->db->join('user_kyc as kyc', 'kyc.userId=users.id');
+        $this->db->order_by('users.id', 'DESC');
+
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getUser($username)
+    {
+        $query = $this->db->select('*')
+            ->from($this->table_name)
+            ->where('email', $username)
+            ->or_where('id', $username)
+            ->or_where('regId', $username)
+            ->get();
+        return $query->result();
+    }
+    public function getVendors($str = null, $other = [])
+    {
+
+        if ($str) {
+            $searchWhere = "(firstName like '%$str%' or lastName like '%$str%' or email like '%$str%' or regId like '%$str%')";
+            $this->db->select('*')
+                ->from($this->table_name)
+                ->where('parentNode', null)
+                ->where('role', 'vendor')
+                ->where("status", 'active')
+                ->where($searchWhere);
+            if (((array_key_exists('to', $other) && $other['to'])) && (array_key_exists('from', $other) && $other['from'])) {
+                // $this->db->where('users.createdAt BETWEEN "' . date('Y-m-d', strtotime($other['from'])) . '" and "' . date('Y-m-d', strtotime($other['to'])) . '"');
+                $this->db->where('users.createdAt >=', date('Y-m-d', strtotime($other['from'])));
+                $this->db->where('users.createdAt <=', date('Y-m-d', strtotime($other['to'] . " +1 days")));
+            }
+            $query = $this->db->get();
+            return $query->result();
+        } else {
+
+            $this->db->select('*')
+                ->from($this->table_name)
+                ->where('parentNode', null)
+                ->where('role', 'vendor')
+                ->where("status", 'active');
+            if (((array_key_exists('to', $other) && $other['to'])) && (array_key_exists('from', $other) && $other['from'])) {
+                // $this->db->where('users.createdAt BETWEEN "' . date('Y-m-d', strtotime($other['from'])) . '" and "' . date('Y-m-d', strtotime($other['to'])) . '"');
+                $this->db->where('users.createdAt >=', date('Y-m-d', strtotime($other['from'])));
+                $this->db->where('users.createdAt <=', date('Y-m-d', strtotime($other['to'] . " +1 days")));
+            }
+            $query = $this->db->get();
+            return $query->result();
+        }
+    }
+    public function adminUserPdfModel($formdate, $todate)
+    {
+        $this->db->select('*')
+            ->from($this->table_name)
+            ->where('parentNode', null)
+            ->where('role', 'vendor')
+            ->where("status", 'active')
+            ->where(array(
+                'users.createdAt >= ' => $formdate,
+                'users.createdAt <= ' => $todate
+            ));
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function getpdf()
+    {
+        //  $query = $this->db->select('*')
+        //     ->from($this->table_name);
+        //     $this->db->where('createdAt <=','2023-02-24 06:49:54');
+        //   $this->db->where('createdAt >=','2023-04-06 06:12:46');
+        //     // ->where('createdAt','2023-02-24 06:49:54')
+        //     // ->or_where('createdAt','2023-04-06 06:12:46')
+        //   $this->db->get();
+        // return $query->result();
+        $query = $this->db
+            ->select('*')->from($this->table_name)
+            ->where(array(
+                'createdAt >= ' => '2023-02-24',
+                'createdAt <= ' => '2023-04-06'
+            ))
+            ->get();
+
+        echo '<pre>';
+        print_r($query->result());
+        die;
+        '</pre>';
+        // return $query->result();
+    }
+    public function bdoGenaretPdf($formdate, $todate)
+    {
+        //  $query = $this->db
+        // ->select('*')->from('users');
+        //  $this->db->join ( 'transactions', 'transactions.userId = users.id' , 'left' )
+        //  ->where('users.id','transactions.userId')
+        // // ->where(array(
+        // //     'users.createdAt >= ' => '2023-02-24',
+        // //     'users.createdAt <= ' => '2023-04-06'
+        // // ))
+        // ->get();
+        $this->db->select('*');
+        $this->db->from('users');
+
+        // $this->db->join ( 'transactions', 'transactions.userId = users.id' , 'left' )
+        $this->db->join('transactions as trans', 'trans.userId=users.id AND trans.transType="registration"')
+            ->where(array(
+                'users.createdAt >= ' => $formdate,
+                'users.createdAt <= ' => $todate
+            ));
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+    public function userGenaretPdf($formdate, $todate)
+    {
+        $wheres = array(
+            'createdAt >= ' => '2023-02-24',
+            'createdAt <= ' => '2023-04-06',
+        );
+        $resp = "SELECT u.*, p.firstName as par_firstName, p.regId as par_reg_id, lc.firstName as left_child_firstName, rc.firstName as right_child_firstName
+            FROM `users` u 
+            LEFT JOIN users p ON p.id = u.parentNode
+            LEFT JOIN users lc on lc.id = u.leftChild 
+            LEFT JOIN users rc on rc.id = u.rightChild 
+            where u.createdAt >='$formdate' AND u.createdAt <='$todate'";
+        //  where u.regId='$search'";2023-04-06 06:12:46
+        //  where u.firstName='$search'";
+        $query = $this->db->query($resp);
+        return $query->result();
+    }
+    public function getAddUser($username, $search, $others = [])
+    {
+        // print_r($others);die;
+        //  $this->db->where('users.createdAt <=', date('Y-m-d', strtotime($other['to'] . " +1 days")));
+        //   where u.status='active'
+        // ('+1 days')
+        if (count($others) > 1) {
+           
+            $role = $this->session->userdata('role');
+            if($role =="superAdmin"){
+            
+            $fromDate = $others['from'];
+            $toDate = $others['to'];
+            //  print_r($toDate);die;
+            $resp = "SELECT u.*, p.firstName as par_firstName, p.regId as par_reg_id, lc.firstName as left_child_firstName, rc.firstName as right_child_firstName
+        FROM `users` u 
+        LEFT JOIN users p ON p.id = u.parentNode
+        LEFT JOIN users lc on lc.id = u.leftChild 
+        LEFT JOIN users rc on rc.id = u.rightChild 
+      
+      where u.createdAt >='$fromDate' AND u.createdAt <='$toDate' AND u.role='vendor'";
+            $query = $this->db->query($resp);
+            return $query->result();
+        }else{
+            
+            $this->db->select('*')
+            ->from($this->table_name)
+            ->where('id', $username);
+        $da = $this->db->get();
+        $response = $da->row();
+        $role = $response->role;
+        $leftChild = $response->leftChild;
+        $rightChild = $response->rightChild;
+            
+             $this->db->select('*')
+                ->from($this->table_name)
+                ->where('id', $leftChild)
+                ->or_where('id', $rightChild)
+                ->or_where('email', $search)
+                ->or_where('regId', $search);
+                if (((array_key_exists('to', $others) && $others['to'])) && (array_key_exists('from', $others) && $others['from'])) {
+            // $this->db->where('users.createdAt BETWEEN "' . date('Y-m-d', strtotime($other['from'])) . '" and "' . date('Y-m-d', strtotime($other['to'])) . '"');
+            $this->db->where('users.createdAt >=', date('Y-m-d', strtotime($others['from'])));
+            $this->db->where('users.createdAt <=', date('Y-m-d', strtotime($others['to'])));
+            $this->db->where('users.role', 'vendor' );
+        }
+        $data=$this->db->get();
+        return $data->result();
+        }
+        }
+        
+        
+        
+        
+        // print_r($others['from']);die;
+        $this->db->select('*')
+            ->from($this->table_name)
+            ->where('id', $username);
+        $da = $this->db->get();
+        $response = $da->row();
+        
+        $role = $response->role;
+        $leftChild = $response->leftChild;
+        $rightChild = $response->rightChild;
+        //   print_r($role);die;
+        // ->where($searchWhere);
+        //                  if (((array_key_exists('to', $other) && $other['to'])) && (array_key_exists('from', $other) && $other['from'])) {
+        //             $this->db->where('users.createdAt BETWEEN "' . date('Y-m-d', strtotime($other['from'])) . '" and "' . date('Y-m-d', strtotime($other['to'])) . '"');
+        // //     
+        //  where u.status='active'}
+        if ($role == "superAdmin") {
+            
+            //  $fromDate=$others['from'];
+            //  $toDate=$others['to'];
+            //  print_r($search);die;
+            $resp = "SELECT u.*, p.firstName as par_firstName, p.regId as par_reg_id, lc.firstName as left_child_firstName, rc.firstName as right_child_firstName
+        FROM `users` u 
+        LEFT JOIN users p ON p.id = u.parentNode
+        LEFT JOIN users lc on lc.id = u.leftChild 
+        LEFT JOIN users rc on rc.id = u.rightChild 
+        where u.status='active'";
+            // where u.createdAt >='$fromDate' AND u.createdAt <='$toDate'";
+            if ($search !== null) {
+                $resp = "SELECT u.*, p.firstName as par_firstName, p.regId as par_reg_id, lc.firstName as left_child_firstName, rc.firstName as right_child_firstName
+            FROM `users` u 
+            LEFT JOIN users p ON p.id = u.parentNode
+            LEFT JOIN users lc on lc.id = u.leftChild 
+            LEFT JOIN users rc on rc.id = u.rightChild 
+             where u.regId='$search' AND u.role='vendor'";
+                //  where u.firstName='$search'";
+                $query = $this->db->query($resp);
+                return $query->result();
+            }
+
+
+
+            $query = $this->db->query($resp);
+            return $query->result();
+        }
+        if ($leftChild != "" ||  $rightChild != "") {
+
+            
+            $this->db->select('*')
+                ->from($this->table_name)
+                ->where('id', $leftChild)
+                ->or_where('id', $rightChild)
+                ->or_where('email', $search)
+                ->or_where('regId', $search);
+            
+        //         if (((array_key_exists('to', $others) && $others['to'])) && (array_key_exists('from', $others) && $others['from'])) {
+        //     // $this->db->where('users.createdAt BETWEEN "' . date('Y-m-d', strtotime($other['from'])) . '" and "' . date('Y-m-d', strtotime($other['to'])) . '"');
+        //     $this->db->where('users.createdAt >=', date('Y-m-d', strtotime($others['from'])));
+        //     $this->db->where('users.createdAt <=', date('Y-m-d', strtotime($others['to'])));
+        // }
+
+            if ($search !== null) {
+                
+                $resp = "SELECT u.*, p.firstName as par_firstName, p.regId as par_reg_id, lc.firstName as left_child_firstName, rc.firstName as right_child_firstName
+            FROM `users` u 
+            LEFT JOIN users p ON p.id = u.parentNode
+            LEFT JOIN users lc on lc.id = u.leftChild 
+            LEFT JOIN users rc on rc.id = u.rightChild 
+             where u.regId='$search' AND u.role='vendor'";
+                //  where u.firstName='$search'";
+                $query = $this->db->query($resp);
+                return $query->result();
+            }
+            
+            $data = $this->db->get();
+            return $data->result();
+        }
+    }
+
+    public function getUserDetails($id)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->join('user_banks', 'user_banks.userId = users.id', 'left');
+        $this->db->join('user_kyc', 'user_kyc.userId = users.id', 'left');
+        $this->db->join('transactions', 'transactions.userId = users.id', 'left');
+        $this->db->join('nominees', 'nominees.userId = users.id', 'left');
+        $this->db->where('users.id', $id);
+        $query = $this->db->get();
+        //   echo '<pre>'; print_r($query->result());die; '</pre>';
+        return $query->result();
+    }
+    public function checkUserId($id)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        return $query->row();
+    }
+    public function checkrole($id)
+    {
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('regId', $id);
+        $query = $this->db->get();
+        return $query->row();
+    }
+    public function createAdmin($adminData)
+    {
+        try {
+
+            $admin = $this->getUser($adminData['regId']);
+            if (count($admin) == 0)
+                $this->createUser($adminData);
+        } catch (Exception $e) {
+            print_r($e);
+        }
+    }
+    public function userRegistrationStatusUpdate($userId, $status)
+    {
+        try {
+            $updateData =  [
+                'status' => $status,
+                'updatedAt' => date('Y-m-d h:i:s'),
+                'updatedBy' => $this->session->userdata('userId')
+            ];
+
+
+            $this->db->from($this->table_name)
+                ->where('id', $userId)
+                ->set(
+                    $updateData
+                )
+                ->update();
+        } catch (Exception $e) {
+            print_r($e);
+        }
+    }
+    public function login($username, $password)
+    {
+        $query = $this->db->from($this->table_name)
+            ->where('email', $username)
+            ->or_where('regId', $username)
+            ->get();
+    }
+
+    public function forgot($username, $random_number)
+    {
+
+        $this->db->select("*")
+            ->from('users')
+            ->where('email', $username)
+            ->or_where('regId', $username);
+        $data = $this->db->get();
+        $result = $data->row();
+
+        if ($result) {
+            // print_r($result);die;
+            $updateData =  [
+                'password' => md5($random_number),
+                'isFirstLogin'=>'n'
+            ];
+
+
+            $this->db->from('users')
+                ->where('id', $result->id)
+                ->set(
+                    $updateData
+                )
+                ->update();
+            $this->session->set_flashdata('flassuccess', 'Your password has been reset and sent on your email.');
+            return $result;
+        } else {
+            $this->session->set_flashdata('error', 'Something is wrong.');
+        }
+    }
+
+    public function dashbordUserDetails($id)
+    {
+        $currentUserrole = $this->session->userdata('role');
+
+        if ($currentUserrole === "superAdmin") {
+            $this->db->select_sum('amount');
+            $this->db->from('transactions');
+            $this->db->where('transType', 'deposite');
+            $this->db->where('status', 'approved');
+            $amountget = $this->db->get();
+            return $amountget->result();
+        } 
+        if ($currentUserrole === "vendor") {
+            $this->db->select_sum('amount');
+            $this->db->from('transactions');
+            $this->db->where('createdBy', $id);
+            $this->db->where('transType', 'deposite');
+            $this->db->where('status', 'approved');
+            $amountget = $this->db->get();
+            return $amountget->result();
+        }
+        if ($currentUserrole === "customer") {
+            $this->db->select_sum('amount');
+            $this->db->from('transactions');
+            $this->db->where('userId', $id);
+            $this->db->where('transType', 'deposite');
+            $this->db->where('status', 'approved');
+            $amountget = $this->db->get();
+            return $amountget->result();
+        }
+    }
+
+    public function stateAllDetails()
+    {
+        $this->db->select('*');
+        $this->db->from('states');
+        $query = $this->db->get();
+        return $query->result();
+    }
+}

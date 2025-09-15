@@ -1,0 +1,157 @@
+<div class="content-wrapper" style="min-height: 2080.26px;">
+<style>
+    img {
+        display: block;
+        max-width: 100%;
+    }
+    .preview {
+        overflow: hidden;
+        width: 160px; 
+        height: 160px;
+        margin: 10px;
+        border: 1px solid red;
+    }
+    .modal-lg{
+        max-width: 1000px !important;
+    }
+</style>
+<div class="container p-4">
+    <div class="card p-3">
+        <main class="app-content">
+            <div class="app-title">
+                <div>
+                    <h1>Add Fund</h1>
+                </div>
+            </div>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link  btn btn-primary mr-3" id="introducerfundbtn" href="javascript:void(0)">Introducer Fund</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary " href="javascript:void(0)" id="customerfundbtn">Customer Fund</a>
+                </li>
+               
+            </ul>
+            <div id="introducerfund">
+                <form method="post" enctype="multipart/form-data" action="<?php echo base_url("users/addvendorfund") ?>" >
+                    
+                    <div class="row">
+                        <?php if ($_SESSION['role'] === "superAdmin") { ?>
+                            <input type="hidden" name="vuserId" value="" id="userId">
+                            
+                            <div class=" col-md-3 mb-3">
+                                <label class="d-block h-50">Introducer code <span style="color:#C00">*</span></label>
+                                <input type="text" class="form-control" name="introducer_code" placeholder="Introducer code" id="sopnsercode" oninput="regintrFunction()" required="">
+                            </div>
+        
+                            <div id="match">
+        
+                            </div>
+                        <?php } ?>
+                        <?php if ($_SESSION['role'] === "vendor") { ?>
+                        <input type="hidden" name="vuserId" value="<?=$this->session->userdata('userId')?>" id="userId">
+                        <?php } ?>
+                        <input type="hidden" name="transType" value="deposite" >
+                        <div class="col-md-3 mb-3">
+                            <label class="d-block h-50">Amount <span style="color:#C00">*</span></label>
+                            <input type="text" readonly name="amount" class="form-control col-xs-8" placeholder="Amount" required="" value="10000">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="d-block h-50">Payment Reference No <span style="color:#C00">*</span></label>
+                            <input type="text" name="transRefNo" class="form-control col-xs-8" placeholder="Payment Reference No" required=""><br />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="d-block h-50">Payment Reference Upload (310px X 200px) <span style="color:#C00">*</span></label>
+                            <input type="file" name="transRefDoc" required class="form-control col-xs-8 crop_image" value="" id="upload_image" onClick="addPayment()">
+                            <input type="text" name="transRefDocs" class="form-control col-xs-8 crop_image"  id="upload_imagess" style="display:none">
+                            <input type="hidden" name="transRefDoc" id="transRefDocId">
+                           
+                        </div>
+                    </div>
+                        <div class="tile-footer">
+                            <div class="row">
+                                <div class="col-md-12 text-left m-1">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </form>
+            </div>
+            <div id="customerfund" style="display:none;"> 
+                <form method="post" enctype="multipart/form-data" action="<?php echo base_url("users/postaddfund") ?>">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="d-block h-50">Cutomer Code <span style="color:#C00">*</span></label>
+                            <input type="text" name="customer_code" class="form-control col-xs-8" placeholder="Cutomer Code" required="" id="customercode" oninput="vregintrFunction()" required="">
+                        </div>
+                        <?php if ($_SESSION['role'] === "superAdmin") { ?>
+                            <div class=" col-md-3 mb-3">
+                                <label class="d-block h-50">Introducer code <span style="color:#C00">*</span></label>
+                                <input type="text" class="form-control" name="introducer_code" placeholder="Introducer code" id="vsopnsercode"  required="">
+                            </div>
+        
+                            
+                        <?php } ?>
+                        <input type="hidden" name="transType" value="deposite" >
+                        <div class="col-md-3 mb-3">
+                            <label class="d-block h-50">Amount <span style="color:#C00">*</span></label>
+                            <input type="text"  name="amount" class="form-control col-xs-8" placeholder="Amount" required="" >
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="d-block h-50">Payment Reference No</label>
+                            <input type="text" name="transRefNo" class="form-control col-xs-8" placeholder="Payment Reference No" required=""><br />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="d-block h-50">Payment Reference Upload (310px X 200px) <span style="color:#C00">*</span></label>
+                            <input type="file" name="transRefDoc" required class="form-control col-xs-8 crop_image" value="" id="upload_image" onClick="addPayment()">
+                            <input type="text" name="transRefDocs" class="form-control col-xs-8 crop_image"  id="upload_imagess" style="display:none">
+                            <input type="hidden" name="transRefDoc" id="transRefDocId">
+                        </div>
+                    
+                        <div id="hoccena"></div>
+                        <input type="hidden" name="vuserId" value="" id="vuserId">
+                        <input type="hidden" name="cuserId" value="" id="cuserId">
+                        <div class="tile-footer">
+                            <div class="row">
+                                <div class="col-md-12 text-center m-1">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+<div class="modal fade show" id="modal_crop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Crop Image Before Upload</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="img-container">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <img src="" id="sample_image" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="preview"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="crop_and_upload" class="btn btn-primary">Crop</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+

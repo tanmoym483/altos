@@ -1,0 +1,109 @@
+<div class="content-wrapper" style="min-height: 2080.26px;">
+<style>
+    img {
+        display: block;
+        max-width: 100%;
+    }
+    .preview {
+        overflow: hidden;
+        width: 160px; 
+        height: 160px;
+        margin: 10px;
+        border: 1px solid red;
+    }
+    .modal-lg{
+        max-width: 1000px !important;
+    }
+</style>
+<div class="container p-4">
+    <div class="card p-3">
+        <main class="app-content">
+                <div class="app-title">
+                    <div>
+                        <h1>Emi calculator</h1>
+                    </div>
+                </div>
+                <?php if ($this->session->flashdata('error') != '') { ?>
+                    <div class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></div>
+                <?php } ?>
+                <?php if ($this->session->flashdata('success') != '') { ?>
+                    <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
+                <?php } ?>
+                <div class="card-body">
+                    
+                    <form method="post" action="<?php echo base_url('diagonostic/postaddDiagonostictest') ?>"  class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="d-block h-25">Enter Amount <span style="color:#C00">*</span></label>
+                        <input type="text" name="amount" class="form-control  col-xs-8" id="emiamount" required="">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="d-block h-25" style="opacity:0">Enter Amount </label>
+                        <button class="btn btn-primary" type="button" id="emi-calculator"><i class="fa fa-fw fa-lg fa-check-circle"></i>Calculate</button>
+                    </div>
+                    <div class="col-md-12 mb-3" >
+                        <table class="table table-bordered" id="emi-calculator-display" style="display:none;">
+                            <thead>
+                                <tr>
+                                    <th>Down payment</th>
+                                    <th>1st EMI</th>
+                                    <th>Total EMI timing</th>
+                                    <th>EMI Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4 mb-3" >
+                        <button class="btn btn-primary" type="button" id="apply-now-btn" style="display:none" ><i class="fa fa-fw fa-lg fa-check-circle"></i>Apply Now</button>
+                    </div>
+                    <div class="col-md-12 mb-3" >
+                        <div class="">
+                            <div style="display:none" class="row" id="card_enter">
+                                <div class="form-outline mb-4 col-sm-4">
+                                    <label class="text-left">Enter card number <span class="text-danger">*</span></label>
+                                    <input type="text"  class="form-control" placeholder="Enter card number" name="cardnumber" id="cardnumber_field" />
+                                </div>
+                                <div class="form-outline mb-4 col-sm-4">
+                                    <label class="d-block" style="opacity:0">Enter Amount </label>
+                                    <button class="btn btn-primary" type="button" id="search_btn"><i class="fa fa-fw fa-lg fa-check-circle"></i>Apply Now</button>
+                                
+                                </div>
+                            </div>
+                            <div id="member-details" class="row" style="display:none">
+                               
+                            </div>
+                            <div id="report-details" class="row" style="display:none" >
+                                <div class="form-outline mb-4 col-sm-4">
+                                    <label class="text-left">Doctor Name <span class="text-danger">*</span></label>
+                                    <input type="text"  class="form-control" placeholder="Doctor Name" name="doctor_name" required />
+                                </div>
+                                <div class="form-outline mb-4 col-sm-4">
+                                    <label class="text-left">Report Description <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" placeholder="Report Description" name="report" required></textarea>
+                                </div>
+                               
+                            </div>
+                            <div id="test_section" class="row" style="display:none">
+                                
+                                <div id="test_add_section"></div>
+                                <div class="clearfix"></div>
+                                <a id="test_add_btn" class="btn btn-primary" style="height: 38px;">Add</a>
+                                <p id="totalAmount"></p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3" style="display:none" id="submit_section">
+                        <label class="d-block h-25" style="opacity:0">Enter Amount </label>
+                        <button class="btn btn-primary" type="submit" id="emi-calculator"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+                    </div>
+                    </form>
+                </div>
+        </main>
+    </div>
+</div>
+<style>
+    .main-footer{display: none;}
+</style>
