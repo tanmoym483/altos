@@ -1516,4 +1516,20 @@ class Admin_model extends CI_Model
        
         return $data;
     }
+
+    public function getproductdata($productId)
+{
+    return $this->db->select('*')
+                    ->from('productinfo')
+                    ->where('id', $productId)
+                    ->get()
+                    ->row();
+}
+
+public function insertProduct($data)
+{
+    $this->db->insert('productinfo', $data);
+    return $this->db->insert_id();
+}
+
 }
