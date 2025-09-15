@@ -123,7 +123,7 @@ $(document).ready(function() {
 
         <div class="col-md-2 pr-2">
           <label class="form-label">Quantity</label>
-          <input type="number" name="products[${productCount}][quantity]" class="form-control" placeholder="Enter Quantity" value="0" min="0" required>
+          <input type="number" name="products[${productCount}][quantity]" class="form-control" placeholder="Enter Quantity" value="0" min="0" oninput="multiplydpmrp(${productCount})" required>
         </div>
 
         <div class="col-md-2">
@@ -172,9 +172,12 @@ function getdpmrprecord(selectElement, productIndex) {
                 const data = JSON.parse(response); // Assuming the response is JSON with DP Price and MRP Price data
 
                 // Update DP and MRP fields for the correct row
-                $(`[name="products[${productIndex}][quantity]"]`).val(1);
                 $(`[name="products[${productIndex}][dpprice]"]`).val(data.dpprice);
                 $(`[name="products[${productIndex}][mrpprice]"]`).val(data.mrpprice);
+
+                // Set default quantity to 1 when product is selected
+                $(`[name="products[${productIndex}][quantity]"]`).val(1);
+                multiplydpmrp(productIndex); // Recalculate DP and MRP after selection
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
@@ -185,22 +188,32 @@ function getdpmrprecord(selectElement, productIndex) {
     }
 }
 
+// Function to multiply DP and MRP prices based on quantity
 function multiplydpmrp(productIndex) {
     let quantity = $(`[name="products[${productIndex}][quantity]"]`).val();
-    let dpprice = $(`[name="products[${productIndex}][dpprice]"]`).val();
-    let mrpprice = $(`[name="products[${productIndex}][mrpprice]"]`).val();
+    let productId = $(`[name="products[${productIndex}][product]"]`).val();
 
-    // Convert to numbers
-    quantity = parseFloat(quantity) || 0;
-    dpprice = parseFloat(dpprice) || 0;
-    mrpprice = parseFloat(mrpprice) || 0;
+    if (productId && quantity) {
+        $.ajax({
+            url: "<?php echo base_url('admin/getfetchdpmrp'); ?>",  // Ensure this URL is correct
+            method: "POST",
+            data: { productId: productId },  // Send productId in the request
+            success: function(response) {
+                console.log(response); // Inspect the response
+                const data = JSON.parse(response); // Assuming the response is JSON with DP Price and MRP Price data
 
-    let dpincrement = dpprice * quantity;
-    let mrpincrement = mrpprice * quantity;
+                // Calculate the new DP and MRP based on the quantity
+                let dpIncrement = data.dpprice * quantity;
+                let mrpIncrement = data.mrpprice * quantity;
 
-    // Set the updated values
-    $(`[name="products[${productIndex}][dpprice]"]`).val(dpincrement.toFixed(2));
-    $(`[name="products[${productIndex}][mrpprice]"]`).val(mrpincrement.toFixed(2));
+                // Update the DP and MRP fields
+                $(`[name="products[${productIndex}][dpprice]"]`).val(dpIncrement.toFixed(2));
+                $(`[name="products[${productIndex}][mrpprice]"]`).val(mrpIncrement.toFixed(2));
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    }
 }
-
 </script>
