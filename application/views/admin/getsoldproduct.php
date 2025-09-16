@@ -40,7 +40,7 @@
                         <?php } 
                     }else{ ?>
                         <tr>
-                            <td colspan="6" class="text-danger fw-bold">No Records Found</td>
+                            <td colspan="7" class="text-danger fw-bold">No Records Found</td>
                         </tr>
                     <?php } ?>
                 </tbody>
