@@ -47,6 +47,12 @@
     text-decoration: none;
   }
 </style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery + Select2 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
 
 <div class="content-wrapper">
   <div class="content-header pb-1">
@@ -95,11 +101,11 @@
       <div class="card shadow-sm border-0 rounded-3 p-3 mb-4">
         <div class="d-flex justify-content-center gap-4">
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="purchaseIn" oninput="toggleForms()">
+            <input type="checkbox" class="form-check-input" id="purchaseIn" oninput="toggleFormsPurchase()">
             <label class="form-check-label fw-semibold" for="purchaseIn">Add Purchase Product</label>
           </div>
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="sellsout" oninput="toggleForms()">
+            <input type="checkbox" class="form-check-input" id="sellsout" oninput="toggleFormsSold()">
             <label class="form-check-label fw-semibold" for="sellsout">Add Selling Product</label>
           </div>
         </div>
@@ -114,7 +120,7 @@
             <!-- Initial Product Fields (default) -->
             <div class="col-md-3">
               <label class="form-label">Product Name</label><br>
-              <select name="products[0][product]" class="form-control product-select" onchange="getdpmrprecord(this, 0)" required>
+              <select name="products[0][product]" class="form-control product-select" onchange="getdpmrprecord(this, 0)" required >
                 <option value="">Select</option>
                 <?php foreach($products as $product){ ?>
                   <option value="<?php echo $product->id; ?>"><?php echo $product->name; ?></option>
@@ -125,7 +131,7 @@
             <div class="col-md-2">
               <label class="form-label">Quantity</label>
               <input type="number" name="products[0][quantity]" class="form-control" 
-                placeholder="Enter Quantity" value="0" min="0" 
+                placeholder="Enter Quantity" value="" min="0" 
                 oninput="multiplydpmrp(0)" required>
             </div>
 
@@ -219,10 +225,6 @@
   </div>
 </div>
 
-<!-- Including JS libraries -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -230,6 +232,7 @@ $(document).ready(function() {
   $('.product-select').select2({
     tags: true,   // allows new entry
     placeholder: "Select or type product",
+    width: '100%',
     allowClear: true
   });
 
@@ -239,7 +242,7 @@ $(document).ready(function() {
   // Function to add a new product entry field
   $('#addProductBtn').click(function() {
     const newProductField = `
-      <div class="row g-3 pl-2" id="productRow${productCount}">
+      <div class="row g-3 pl-1" id="productRow${productCount}">
         <div class="col-md-3">
           <label class="form-label">Product Name</label>
           <select name="products[${productCount}][product]" class="form-control product-select" onchange="getdpmrprecord(this, ${productCount})" required>
@@ -276,6 +279,7 @@ $(document).ready(function() {
     $(`#productRow${productCount} .product-select`).select2({
       tags: true,
       placeholder: "Select or type product",
+      width: '100%',
       allowClear: true
     });
 
@@ -295,6 +299,7 @@ $(document).ready(function() {
   $('.product-select-sells').select2({
     tags: false,   // allows new entry
     placeholder: "Select or type product",
+    width: '100%',
     allowClear: true
   });
 
@@ -304,7 +309,7 @@ $(document).ready(function() {
   // Function to add a new product entry field
   $('#addProductBtnSells').click(function() {
     const newProductField = `
-      <div class="row g-3 pl-2" id="productRow${productCount}">
+      <div class="row g-3 pl-1" id="productRow${productCount}">
         <div class="col-md-3">
           <label class="form-label">Product Name</label>
           <select name="products[${productCount}][product]" class="form-control product-select-sells" onchange="getdpmrprecord(this, ${productCount})" required>
@@ -341,6 +346,7 @@ $(document).ready(function() {
     $(`#productRow${productCount} .product-select-sells`).select2({
       tags: true,
       placeholder: "Select or type product",
+      width: '100%',
       allowClear: true
     });
 
@@ -438,7 +444,7 @@ function multiplydpmrpSells(productIndex) {
 
 
 // Toggle forms
-function toggleForms() {
+function toggleFormsPurchase() {
     if ($('#purchaseIn').prop('checked')) {
         $('#purchase_in').show();
         $('#sellsout').prop('checked', false); // <-- FIXED
@@ -447,15 +453,18 @@ function toggleForms() {
         $('#purchase_in').hide();
     }
 
-    if ($('#sellsout').prop('checked')) {
+    
+}
+
+function toggleFormsSold() {
+if ($('#sellsout').prop('checked')) {
         $('#sells_out').show();
         $('#purchaseIn').prop('checked', false); // <-- keep them exclusive
         $('#purchase_in').hide();
     } else {
         $('#sells_out').hide();
     }
-}
-
+  }
 
 
 
