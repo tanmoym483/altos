@@ -21,11 +21,23 @@ class Dashboard extends MY_Controller
     public function index()
     {
         $productInfo = $this->db->select('*')->from('productinfo')->get()->result();
+
+        $purchasequantity = $this->db->select_sum('quantity')
+                             ->get('purchasein')
+                             ->row()
+                             ->quantity;
+
+        $soldquantity = $this->db->select_sum('quantity')
+                             ->get('product_sold')
+                             ->row()
+                             ->quantity;
     //    echo '<pre>'; print_r($productInfo);die;
         $this->view(
             'admin/dashboard',
             [
                 'products'      =>    $productInfo,
+                'purchaseQuantity'  =>  $purchasequantity,
+                'soldquantity'      =>  $soldquantity
             ]
         );
     }

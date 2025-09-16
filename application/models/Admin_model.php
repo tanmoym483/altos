@@ -1547,4 +1547,16 @@ public function insertProduct($data)
             return null;  // Return null if no product found
         }
     }
+
+    public function insertCustomerdata($data)
+    {
+        $this->db->insert('customer_info', $data);
+        return $this->db->insert_id();
+    }
+
+    public function insertProductdata($data)
+{
+    $this->db->insert('product_sold', $data);
+    return $this->db->insert_id();
+}
 }

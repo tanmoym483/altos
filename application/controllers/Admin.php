@@ -74,14 +74,7 @@ class Admin extends MY_Controller
         $this->view('admin/admin-edit',['users' => $user,'districtlist'=>$this->districtlist()]);
     }
 
-//     public function index()
-// {
-//     $productInfo = $this->db->select('*')->from('productinfo')->get()->result();
 
-//     $this->view('admin/dashboard', [
-//         'products' => $productInfo,
-//     ]);
-// }
 
 public function purchaseform()
 {
@@ -165,6 +158,121 @@ public function getfetchdpmrp()
         echo json_encode(['error' => 'Invalid product ID']);
     }
 }
+
+public function sellsform()
+{
+    $data = $this->input->post();
+
+    // 1. Insert customer
+    $insertData = [
+        'name'      => $data['customerName'],
+        'phone'     => $data['phone'],
+        'createdBy' => $this->session->userdata('userId'),
+        'createdAt' => date('Y-m-d H:i:s')
+    ];
+
+    $customerId = $this->modd->insertCustomerdata($insertData);
+
+    // 2. Insert products (loop through array)
+    if (!empty($data['products']) && is_array($data['products'])) {
+        foreach ($data['products'] as $product) {
+            $productInsert = [
+                'customerId'        => $customerId,
+                'productinfo_id'    => $product['product'],
+                'quantity'          => $product['quantity'],
+                'total_dp_price'    => $product['dpprice'],
+                'total_mrp_price'   => $product['mrpprice'],
+                'createdAt'         => date('Y-m-d H:i:s'),
+                'createdBy'         => $this->session->userdata('userId'),
+            ];
+
+            $this->modd->insertProductdata($productInsert);
+        }
+    }
+
+    $this->session->set_flashdata('success', 'Products are Sold successfully');
+
+    // Optional redirect
+    redirect('Dashboard');
+}
+
+public function getpurchaseproduct()
+{
+    $purchaseproduct = $this->db->select('*')->from('purchasein')->order_by('id', 'DESC')->get()->result();
+    // echo '<pre>'; print_r($purchaseproduct);die;
+    $this->view('admin/getpurchaseproduct',['purchaseproduct' => $purchaseproduct]);
+}
+
+public function getsoldproduct()
+{
+    $soldproduct = $this->db
+                    ->select('product_sold.*, customer_info.name, customer_info.phone, productinfo.name as productName')
+                    ->from('product_sold')
+                    ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
+                    ->join('productinfo','productinfo.id = product_sold.productinfo_id')
+                    ->get()
+                    ->result();
+    $this->view('admin/getsoldproduct', ['soldproduct' => $soldproduct]);
+}
+
+public function getproductstock()
+{
+    $product_info = $this->db
+        ->select('*')
+        ->from('productinfo')
+        ->get()
+        ->result();
+
+    $stock_data = [];
+
+    foreach ($product_info as $product) {
+        // Purchase totals
+        $purchase = $this->db->select_sum('quantity')
+                            ->select_sum('total_dp_price')
+                            ->select_sum('total_mrp_price')
+                            ->where('productinfo_id', $product->id)
+                            ->get('purchasein')
+                            ->row();
+
+        // Sold totals
+        $sold = $this->db->select_sum('quantity')
+                        ->select_sum('total_dp_price')
+                        ->select_sum('total_mrp_price')
+                        ->where('productinfo_id', $product->id)
+                        ->get('product_sold')
+                        ->row();
+
+        // Prevent null values (if no rows exist)
+        $purchase_qty   = $purchase->quantity ?? 0;
+        $purchase_dp    = $purchase->total_dp_price ?? 0;
+        $purchase_mrp   = $purchase->total_mrp_price ?? 0;
+
+        $sold_qty       = $sold->quantity ?? 0;
+        $sold_dp        = $sold->total_dp_price ?? 0;
+        $sold_mrp       = $sold->total_mrp_price ?? 0;
+
+        // Calculate stock
+        $stockquantity  = $purchase_qty - $sold_qty;
+        $stockdpprice   = $purchase_dp - $sold_dp;
+        $stockmrpprice  = $purchase_mrp - $sold_mrp;
+
+        $stock_data[] = [
+            'product_id'    => $product->id,
+            'product_name'  => $product->name,
+            'purchase_qty'  => $purchase_qty,
+            'sold_qty'      => $sold_qty,
+            'stock_qty'     => $stockquantity,
+            'stock_dp'      => $stockdpprice,
+            'stock_mrp'     => $stockmrpprice,
+        ];
+    }
+
+    // Pass data to view
+    $data['stock_data'] = $stock_data;
+    // echo '<pre>'; print_r($data);die;
+    $this->view('admin/getproductstock', $data);
+}
+
 
 
 }
