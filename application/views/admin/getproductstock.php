@@ -26,6 +26,8 @@
                         <th>Purchase Quantity</th>
                         <th>Sold Quantity</th>
                         <th>Total Stock</th>
+                        <!-- <th>Dp Rate(Single)</th> -->
+                        <!-- <th>MRP Rate(Single)</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -36,10 +38,15 @@
                         ?>
                         <tr>
                             <td><?php echo $count++; ?></td>
-                            <td class="fw-semibold text-dark"><?php echo $product['product_name']; ?></td>
+                            <td class="fw-semibold text-dark"><?php echo $product['product_name']; ?><br>
+                                <small><strong>DP:</strong><?php echo $product['single_dp']; ?></small><br>
+                                <small><strong>MRP:</strong><?php echo $product['single_mrp']; ?></small>
+                            </td>
                             <td class="text-primary fw-bold"><?php echo $product['purchase_qty']; ?></td>
                             <td class="text-danger fw-bold"><?php echo $product['sold_qty']; ?></td>
                             <td class="text-success fw-bold"><?php echo $product['stock_qty']; ?></td>
+                            <!-- <td class="text-secondary fw-bold"><?php echo $product['single_dp']; ?></td> -->
+                            <!-- <td class="text-warning fw-bold"><?php echo $product['single_mrp']; ?></td> -->
                         </tr>
                         <?php } 
                     }else{ ?>
