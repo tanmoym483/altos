@@ -1,13 +1,11 @@
 <div class="content-wrapper" style="min-height: 2080.26px;">
+    
 
     <div class="card p-4 mt-3 shadow border-0">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
             <h4 class="mb-2 mb-md-0 fw-bold text-primary">📦 Total Stock</h4>
             
             <div class="d-flex gap-2 justify-content-between">
-                <!-- Search Box -->
-
-                
                 <!-- Excel Download Button -->
                 <button id="downloadExcel" class="btn btn-success btn-sm">
                     <i class="fas fa-file-excel"></i> Download Excel
@@ -44,7 +42,7 @@
                             </td>
                             <td class="text-primary fw-bold"><?php echo $product['purchase_qty']; ?></td>
                             <td class="text-danger fw-bold"><?php echo $product['sold_qty']; ?></td>
-                            <td class="text-success fw-bold"><?php echo $product['stock_qty']; ?></td>
+                            <td class="text-success fw-bold"><strong><?php echo $product['stock_qty']; ?></strong></td>
                             <!-- <td class="text-secondary fw-bold"><?php echo $product['single_dp']; ?></td> -->
                             <!-- <td class="text-warning fw-bold"><?php echo $product['single_mrp']; ?></td> -->
                         </tr>

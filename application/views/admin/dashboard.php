@@ -167,13 +167,17 @@
         <!-- <h5 class="mb-3 text-center fw-bold text-secondary">Customer Details</h5> -->
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label>Customer Name</label>
             <input type="text" name="customerName" class="form-control" placeholder="Custer Name" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label>Phone Number</label>
                   <input type="tel" name="phone" placeholder="Phone Number" maxlength="10" pattern="[0-9]{10}" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label>Distributor Id</label>
+                  <input type="text" name="distributorCode" placeholder="Distributor Id" class="form-control" required>
                 </div>
           </div>
 

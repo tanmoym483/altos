@@ -54,16 +54,16 @@
               </a>
                   <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="<?php echo base_url('admin/admincreate') ?>" class="nav-link">
+                  <a href="<?php echo base_url('admin/getpurchaseproduct') ?>" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Add Product</p>
+                    <p>Stock In</p>
                   </a>
                 </li>
                 
                 <li class="nav-item">
-                  <a href="<?php echo base_url('admin/admin_list') ?>" class="nav-link">
+                  <a href="<?php echo base_url('admin/getsoldproduct') ?>" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Product List</p>
+                    <p>Stock Out</p>
                   </a>
                 </li>
               </ul>                        

@@ -130,23 +130,63 @@ public function purchaseform()
 
     // Flash success message and redirect
     $this->session->set_flashdata('success', 'Products are added successfully');
-    redirect('Dashboard');
+    redirect('admin/getpurchaseproduct');
 }
 
 public function getfetchdpmrp()
 {
     // Get the productId from the AJAX request
     $productId = $this->input->post('productId');
+    // $product = $this->db
+    // ->select('id, name')
+    // ->from('productinfo')
+    // ->where('id', $productId)
+    // ->get()
+    // ->row();
+
+
+// foreach ($product_info as $product) {
+    // Total purchased quantity
     
+
+    // Store result
+    // $stock_data[] = [
+    //     'product_id'   => $product->id,
+    //     'product_name' => $product->name,
+    //     'stock_qty'    => $stock_qty
+    // ];
+// }
+
+// Pass to view
+// $data['stock_data'] = $stock_data;
     // Check if the productId is provided
     if ($productId) {
         $productData = $this->modd->getProductById($productId);
+
+        $purchase_qty = $this->db
+        ->select_sum('quantity')
+        ->where('productinfo_id', $productId)
+        ->get('purchasein')
+        ->row()
+        ->quantity ?? 0;
+
+    // Total sold quantity
+        $sold_qty = $this->db
+        ->select_sum('quantity')
+        ->where('productinfo_id', $productId)
+        ->get('product_sold')
+        ->row()
+        ->quantity ?? 0;
+
+    // Calculate stock quantity
+    $stock_qty = $purchase_qty - $sold_qty;
         
         if ($productData) {
             // Respond with the DP and MRP prices
             $response = [
                 'dpprice' => $productData->dp,    // Assuming 'dp' is the column for DP Price
-                'mrpprice' => $productData->mrp   // Assuming 'mrp' is the column for MRP Price
+                'mrpprice' => $productData->mrp,   // Assuming 'mrp' is the column for MRP Price
+                'stockqty'  => $stock_qty
             ];
             echo json_encode($response); // Return the data as JSON
         } else {
@@ -165,10 +205,11 @@ public function sellsform()
 
     // 1. Insert customer
     $insertData = [
-        'name'      => $data['customerName'],
-        'phone'     => $data['phone'],
-        'createdBy' => $this->session->userdata('userId'),
-        'createdAt' => date('Y-m-d H:i:s')
+        'name'              => $data['customerName'],
+        'phone'             => $data['phone'],
+        'distributorCode'   =>  $data['distributorCode'],
+        'createdBy'         => $this->session->userdata('userId'),
+        'createdAt'         => date('Y-m-d H:i:s')
     ];
 
     $customerId = $this->modd->insertCustomerdata($insertData);
@@ -200,19 +241,54 @@ public function getpurchaseproduct()
 {
     $purchaseproduct = $this->db->select('*')->from('purchasein')->order_by('id', 'DESC')->get()->result();
     // echo '<pre>'; print_r($purchaseproduct);die;
-    $this->view('admin/getpurchaseproduct',['purchaseproduct' => $purchaseproduct]);
+    $productInfo = $this->db->select('*')->from('productinfo')->get()->result();
+
+        $purchasequantity = $this->db->select_sum('quantity')
+                             ->get('purchasein')
+                             ->row()
+                             ->quantity;
+
+        $soldquantity = $this->db->select_sum('quantity')
+                             ->get('product_sold')
+                             ->row()
+                             ->quantity;
+    $this->view('admin/getpurchaseproduct',[
+        'purchaseproduct'   =>  $purchaseproduct,
+        'products'          =>  $productInfo,
+        'purchaseQuantity'  =>  $purchasequantity,
+        'soldquantity'      =>  $soldquantity
+    ]);
 }
 
 public function getsoldproduct()
 {
     $soldproduct = $this->db
-                    ->select('product_sold.*, customer_info.name, customer_info.phone, productinfo.name as productName')
+                    ->select('product_sold.*, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName')
                     ->from('product_sold')
                     ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
                     ->join('productinfo','productinfo.id = product_sold.productinfo_id')
                     ->get()
                     ->result();
-    $this->view('admin/getsoldproduct', ['soldproduct' => $soldproduct]);
+            // echo '<pre>'; print_r($soldproduct);die;
+        $productInfo = $this->db->select('*')->from('productinfo')->get()->result();
+
+        $purchasequantity = $this->db->select_sum('quantity')
+                             ->get('purchasein')
+                             ->row()
+                             ->quantity;
+
+        $soldquantity = $this->db->select_sum('quantity')
+                             ->get('product_sold')
+                             ->row()
+                             ->quantity;
+        
+
+    $this->view('admin/getsoldproduct', [
+                        'soldproduct' => $soldproduct,
+                        'products'      =>    $productInfo,
+                        'purchaseQuantity'  =>  $purchasequantity,
+                        'soldquantity'      =>  $soldquantity,
+    ]);
 }
 
 public function getproductstock()
@@ -275,6 +351,68 @@ public function getproductstock()
     $this->view('admin/getproductstock', $data);
 }
 
+public function updatesoldproduct()
+{
+    $data = (object) $this->input->post();
 
+    // Total purchased quantity
+    $purchase_qty = $this->db
+        ->select_sum('quantity')
+        ->where('productinfo_id', $data->productid)
+        ->get('purchasein')
+        ->row()
+        ->quantity ?? 0;
+
+    // Total sold quantity excluding current row (if editing existing one)
+    $sold_qty = $this->db
+        ->select_sum('quantity')
+        ->where('productinfo_id', $data->productid)
+        ->where('id !=', $data->id) // Exclude the record being updated
+        ->get('product_sold')
+        ->row()
+        ->quantity ?? 0;
+
+    // Calculate available stock
+    $stock_qty = $purchase_qty - $sold_qty;
+
+    // Validate stock
+    if ($data->quantity > 0 && $data->quantity <= $stock_qty) {
+
+        $insertData = [
+            'quantity'        => $data->quantity,
+            'total_dp_price'  => $data->total_dp_price,
+            'total_mrp_price' => $data->total_mrp_price
+        ];
+
+        $update = $this->db->where('id', $data->id)->update('product_sold', $insertData);
+
+        if ($update) {
+            echo json_encode([
+                'status'  => 'success',
+                'message' => 'Product sold updated successfully.'
+            ]);
+        } else {
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Failed to update product sold.'
+            ]);
+        }
+
+    } else {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Invalid quantity. Must be greater than 0 and not exceed available stock (' . $stock_qty . ').'
+        ]);
+    }
+}
+
+
+public function deletesoldproduct($productId){
+    $delete_product = $this->db->where('id', $productId)->delete('product_sold');
+    if($delete_product){
+        $this->session->set_flashdata('success', 'Product sold deleted successfully.');
+    }
+    redirect('admin/getsoldproduct');
+}
 
 }
