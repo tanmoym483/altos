@@ -84,19 +84,26 @@
 
         <!-- Search Fields -->
         <div class="row mb-3">
-            <div class="col-md-3">
-                <input type="text" id="searchName" class="form-control" placeholder="Search by Customer Name">
-            </div>
-            <div class="col-md-3">
-                <input type="date" id="fromDate" class="form-control">
-            </div>
-            <div class="col-md-3">
-                <input type="date" id="toDate" class="form-control">
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-primary w-100" onclick="filterTable()">Search</button>
-            </div>
-        </div>
+    <div class="col-md-3">
+        <input type="text" id="searchName" class="form-control" placeholder="Search by Customer Name">
+    </div>
+    <div class="col-md-3">
+        <input type="text" id="searchPhone" class="form-control" placeholder="Search by Phone">
+    </div>
+    <div class="col-md-3">
+        <input type="text" id="searchDistributor" class="form-control" placeholder="Search by Distributor Code">
+    </div>
+    <div class="col-md-1">
+        <input type="date" id="fromDate" class="form-control">
+    </div>
+    <div class="col-md-1">
+        <input type="date" id="toDate" class="form-control">
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-primary w-100" style="opacity:0;" onclick="filterTable()">Search</button>
+    </div>
+</div>
+
 
         <div class="table-responsive">
             <table id="purchaseTable" class="table table-striped table-bordered text-center align-middle">
@@ -237,8 +244,17 @@ document.getElementById("downloadExcel").addEventListener("click", function () {
 });
 
 // Name & Date Range Filter
+// Attach live search events
+document.getElementById("searchName").addEventListener("keyup", filterTable);
+document.getElementById("searchPhone").addEventListener("keyup", filterTable);
+document.getElementById("searchDistributor").addEventListener("keyup", filterTable);
+document.getElementById("fromDate").addEventListener("change", filterTable);
+document.getElementById("toDate").addEventListener("change", filterTable);
+
 function filterTable() {
     var nameInput = document.getElementById("searchName").value.toLowerCase();
+    var phoneInput = document.getElementById("searchPhone").value.toLowerCase();
+    var distributorInput = document.getElementById("searchDistributor").value.toLowerCase();
     var fromDate = document.getElementById("fromDate").value;
     var toDate = document.getElementById("toDate").value;
 
@@ -246,25 +262,39 @@ function filterTable() {
     var tr = table.getElementsByTagName("tr");
 
     for (var i = 1; i < tr.length; i++) {
-        var tdName = tr[i].getElementsByTagName("td")[2]; // Customer Info column
-        var tdDate = tr[i].getElementsByTagName("td")[1]; // Date column
+        var tdName        = tr[i].getElementsByTagName("td")[2];
+        var tdDistributor = tr[i].getElementsByTagName("td")[3];
+        var tdDate        = tr[i].getElementsByTagName("td")[1];
 
-        if (tdName && tdDate) {
-            var txtName = tdName.textContent.toLowerCase();
-            var txtDate = tdDate.textContent.substring(0, 10); // YYYY-MM-DD
+        if (tdName && tdDate && tdDistributor) {
+            var txtName        = tdName.textContent.toLowerCase();
+            var txtPhone       = tdName.textContent.toLowerCase();
+            var txtDistributor = tdDistributor.textContent.toLowerCase();
+            var txtDate        = tdDate.textContent; // original "dd-mm-yyyy hh:mm AM"
 
             var show = true;
 
-            // Name filter
+            // Customer Name filter
             if (nameInput && txtName.indexOf(nameInput) === -1) {
                 show = false;
             }
 
-            // Date range filter
-            if (fromDate && txtDate < fromDate) {
+            // Phone filter
+            if (phoneInput && txtPhone.indexOf(phoneInput) === -1) {
                 show = false;
             }
-            if (toDate && txtDate > toDate) {
+
+            // Distributor filter
+            if (distributorInput && txtDistributor.indexOf(distributorInput) === -1) {
+                show = false;
+            }
+
+            // Date range filter (fix)
+            var tableDate = formatTableDate(txtDate);
+            if (fromDate && tableDate < fromDate) {
+                show = false;
+            }
+            if (toDate && tableDate > toDate) {
                 show = false;
             }
 
@@ -272,6 +302,13 @@ function filterTable() {
         }
     }
 }
+
+function formatTableDate(dateStr) {
+    // dateStr like "17-09-2025 11:30 AM"
+    let parts = dateStr.split(" ")[0].split("-"); // [dd, mm, yyyy]
+    return parts[2] + "-" + parts[1] + "-" + parts[0]; // yyyy-mm-dd
+}
+
 
 function openEditModal(el) {
     // Get values from data attributes
