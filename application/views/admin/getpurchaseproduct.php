@@ -36,19 +36,23 @@
                 placeholder="Enter Quantity" value="" min="0" 
                 oninput="multiplydpmrp(0)" required>
             </div>
-
-            <div class="col-md-2">
-              <label class="form-label">DP Price</label>
-              <input type="text" name="products[0][dpprice]" class="form-control" placeholder="Enter DP Price" required>
-            </div>
-
             <div class="col-md-2">
               <label class="form-label">MRP Price</label>
               <input type="text" name="products[0][mrpprice]" class="form-control" placeholder="Enter MRP Price" required>
             </div>
 
+            <div class="col-md-2">
+              <label class="form-label">DP Price</label>
+              <input type="text" name="products[0][dpprice]" class="form-control" placeholder="Enter DP Price" required>
+            </div>
+            
+            <div class="col-md-2">
+              <label class="form-label">BV</label>
+              <input type="text" name="products[0][bv]" class="form-control" placeholder="Enter BV" required>
+            </div>
+
             <!-- Add Button Beside Fields -->
-            <div class="col-md-2 d-flex align-items-end">
+            <div class="col-md-1 d-flex align-items-end">
               <button type="button" id="addProductBtn" class="btn btn-info ">+Add</button>
             </div>
 
@@ -155,7 +159,12 @@ $(document).ready(function() {
 
         <div class="col-md-2 pr-2">
           <label class="form-label">Quantity</label>
-          <input type="number" name="products[${productCount}][quantity]" class="form-control" placeholder="Enter Quantity" value="0" min="0" oninput="multiplydpmrp(${productCount})" required>
+          <input type="number" name="products[${productCount}][quantity]" class="form-control" placeholder="Enter Quantity" value="" min="0" oninput="multiplydpmrp(${productCount})" required>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">MRP Price</label>
+          <input type="text" name="products[${productCount}][mrpprice]" class="form-control" placeholder="Enter MRP Price" required>
         </div>
 
         <div class="col-md-2">
@@ -164,12 +173,12 @@ $(document).ready(function() {
         </div>
 
         <div class="col-md-2">
-          <label class="form-label">MRP Price</label>
-          <input type="text" name="products[${productCount}][mrpprice]" class="form-control" placeholder="Enter MRP Price" required>
-        </div>
+              <label class="form-label">BV</label>
+              <input type="text" name="products[${productCount}][bv]" class="form-control" placeholder="Enter BV" required>
+            </div>
 
         <!-- Remove Button Beside Fields -->
-        <div class="col-md-2 d-flex align-items-end">
+        <div class="col-md-1 d-flex align-items-end">
           <button type="button" class="btn btn-danger" onclick="removeProductRow(${productCount})">Remove</button>
         </div>
       </div>
@@ -206,6 +215,7 @@ function getdpmrprecord(selectElement, productIndex) {
                 // Update DP and MRP fields for the correct row
                 $(`[name="products[${productIndex}][dpprice]"]`).val(data.dpprice);
                 $(`[name="products[${productIndex}][mrpprice]"]`).val(data.mrpprice);
+                $(`[name="products[${productIndex}][bv]"]`).val(data.bv);
 
                 // Set default quantity to 1 when product is selected
                 $(`[name="products[${productIndex}][quantity]"]`).val(1);
@@ -237,10 +247,12 @@ function multiplydpmrp(productIndex) {
                 // Calculate the new DP and MRP based on the quantity
                 let dpIncrement = data.dpprice * quantity;
                 let mrpIncrement = data.mrpprice * quantity;
+                let bvIncrement = data.bv * quantity;
 
                 // Update the DP and MRP fields
                 $(`[name="products[${productIndex}][dpprice]"]`).val(dpIncrement.toFixed(2));
                 $(`[name="products[${productIndex}][mrpprice]"]`).val(mrpIncrement.toFixed(2));
+                $(`[name="products[${productIndex}][bv]"]`).val(bvIncrement.toFixed(2));
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);

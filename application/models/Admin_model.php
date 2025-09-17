@@ -1535,7 +1535,7 @@ public function insertProduct($data)
  public function getProductById($productId)
     {
         // Query to get product data from the products table based on productId
-        $this->db->select('dp, mrp');  // Select DP and MRP prices
+        $this->db->select('dp, mrp, bv');  // Select DP and MRP prices
         $this->db->from('productinfo');   // Assuming your table name is 'products'
         $this->db->where('id', $productId);
         $query = $this->db->get();

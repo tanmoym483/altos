@@ -86,6 +86,7 @@ public function purchaseform()
         // Calculate the price per unit
         $singledp = $product['dpprice'] / $product['quantity'];
         $singlemrp = $product['mrpprice'] / $product['quantity'];
+        $singlebv   = $product['bv'] / $product['quantity'];
 
         $insertId = null;
         $productName = null;
@@ -107,6 +108,7 @@ public function purchaseform()
                 'name'      => $product['product'],
                 'dp'        => $singledp,
                 'mrp'       => $singlemrp,
+                'bv'        => $singlebv,
                 'createdAt' => date('Y-m-d H:i:s')
             ];
 
@@ -121,6 +123,7 @@ public function purchaseform()
             'quantity'          => $product['quantity'],
             'total_dp_price'    => $product['dpprice'],
             'total_mrp_price'   => $product['mrpprice'],
+            'total_bv'          => $product['bv'],
             'createdBy'         => $this->session->userdata('userId'),
             'createdAt'         => date('Y-m-d H:i:s')
         ];
@@ -186,6 +189,7 @@ public function getfetchdpmrp()
             $response = [
                 'dpprice' => $productData->dp,    // Assuming 'dp' is the column for DP Price
                 'mrpprice' => $productData->mrp,   // Assuming 'mrp' is the column for MRP Price
+                'bv'       => $productData->bv,
                 'stockqty'  => $stock_qty
             ];
             echo json_encode($response); // Return the data as JSON
