@@ -17,6 +17,7 @@
     <div class="card shadow-sm border-0 rounded-3 p-4" id="purchase_in">
         <h5 class="mb-3 text-center fw-bold text-secondary">Add Product Entry</h5>
         <form action="<?php echo base_url('admin/purchaseform'); ?>" method="post">
+          <div class="d-flex">
           <div class="row g-3" id="productFieldsContainer">
 
             <!-- Initial Product Fields (default) -->
@@ -52,12 +53,11 @@
             </div>
 
             <!-- Add Button Beside Fields -->
-            <div class="col-md-1 d-flex align-items-end">
+          </div>
+          <div class="d-flex align-items-end text-right mt-2">
               <button type="button" id="addProductBtn" class="btn btn-info ">+Add</button>
             </div>
-
-          </div>
-
+        </div>
           <div class="col-md-12 text-end mt-3">
             <button class="btn btn-success px-4">Submit</button>
           </div>

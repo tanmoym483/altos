@@ -271,6 +271,7 @@ public function getsoldproduct()
                     ->from('product_sold')
                     ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
                     ->join('productinfo','productinfo.id = product_sold.productinfo_id')
+                    ->order_by('id','DESC')
                     ->get()
                     ->result();
             // echo '<pre>'; print_r($soldproduct);die;
