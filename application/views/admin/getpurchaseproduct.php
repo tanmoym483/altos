@@ -179,7 +179,7 @@ $(document).ready(function() {
 
         <!-- Remove Button Beside Fields -->
         <div class="col-md-1 d-flex align-items-end">
-          <button type="button" class="btn btn-danger" onclick="removeProductRow(${productCount})">Remove</button>
+          <button type="button" class="btn btn-danger" onclick="removeProductRow(${productCount})">-</button>
         </div>
       </div>
     `;
