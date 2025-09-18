@@ -22,7 +22,7 @@
                   <input type="text" name="distributorCode" placeholder="Distributor Id" class="form-control">
                 </div>
           </div>
-
+        <div class="d-flex">
           <div class="row g-3" id="productFieldsContainerSells">
 
             <!-- Initial Product Fields (default) -->
@@ -53,17 +53,19 @@
               <input type="text" name="products[0][dpprice]" class="form-control" placeholder="Enter DP Price" readonly required>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-3">
               <label class="form-label">MRP Price</label>
               <input type="text" name="products[0][mrpprice]" class="form-control" placeholder="Enter MRP Price" readonly required>
             </div>
 
             <!-- Add Button Beside Fields -->
-            <div class="col-md-1 d-flex align-items-end">
-              <button type="button" id="addProductBtnSells" class="btn btn-info ">+Add</button>
-            </div>
+            
 
           </div>
+          <div class="col-md-1 d-flex align-items-end">
+              <button type="button" id="addProductBtnSells" class="btn btn-info ">+Add</button>
+            </div>
+        </div>
 
           <div class="col-md-12 text-end mt-3">
             <button class="btn btn-success px-4">Submit</button>
@@ -544,7 +546,7 @@ $(document).ready(function() {
 
         <!-- Remove Button Beside Fields -->
         <div class="col-md-1 d-flex align-items-end">
-          <button type="button" class="btn btn-danger" onclick="removeProductRow(${productCount})">Remove</button>
+          <button type="button" class="btn btn-danger" onclick="removeProductRow(${productCount})">-</button>
         </div>
       </div>
     `;
