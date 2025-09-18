@@ -347,6 +347,7 @@ public function getproductstock()
             'stock_mrp'     => $stockmrpprice,
             'single_dp'     => $product->dp,
             'single_mrp'    => $product->mrp,
+            'single_bv'     => $product->bv
         ];
     }
 

@@ -37,8 +37,9 @@
                         <tr>
                             <td><?php echo $count++; ?></td>
                             <td class="fw-semibold text-dark"><?php echo $product['product_name']; ?><br>
-                                <small><strong>DP:</strong><?php echo $product['single_dp']; ?></small><br>
-                                <small><strong>MRP:</strong><?php echo $product['single_mrp']; ?></small>
+                                <small><strong>MRP:</strong><?php echo $product['single_mrp']; ?></small>&nbsp;
+                                <small><strong>DP:</strong><?php echo $product['single_dp']; ?></small>&nbsp;
+                                <small><strong>BV:</strong><?php echo $product['single_bv']; ?></small>
                             </td>
                             <td class="text-primary fw-bold"><?php echo $product['purchase_qty']; ?></td>
                             <td class="text-danger fw-bold"><?php echo $product['sold_qty']; ?></td>
