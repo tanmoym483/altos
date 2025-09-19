@@ -154,11 +154,13 @@
                                     data-distributor="<?php echo $product->distributorCode; ?>"> <!-- Distributor Code -->
                                     <i class="fa fa-pen"></i>
                                 </a>
+                                <?php if($_SESSION['role'] == 'superAdmin'){?>
                                 <a href="<?php echo base_url('admin/deletesoldproduct/' . $product->id); ?>" 
                                 class="text-danger" 
                                 onclick="return confirm('Are you sure you want to delete this product?');">
                                 <i class="fas fa-trash"></i>
                                 </a>
+                                <?php } ?>
                             </td>
                         </tr>
                         <?php } 

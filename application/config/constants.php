@@ -88,7 +88,7 @@ defined('REG_PRE')             or define('REG_PRE', 'ATF91');
 defined('SMTP_HOST')             or define('SMTP_HOST', 'smtp.gmail.com');
 
 defined('SMTP_USER')             or define('SMTP_USER', 'aponjontrust@gmail.com');
-defined('SMTP_PASS')             or define('SMTP_PASS', 'ggbirmmxjugrjdsn');
+defined('SMTP_PASS')             or define('SMTP_PASS', 'fceitqpewbjysgql');
 defined('SMTP_PORT')             or define('SMTP_PORT', '587');
 defined('SITE_NAME')             or define('SITE_NAME', 'Aponjon Trust');
 
