@@ -68,7 +68,7 @@
     <div class="card p-3 mt-2 shadow-sm border-0">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Product Purchase List</h4>
-            
+            <?php if($this->session->userdata('role') == 'superAdmin'){?>
             <div>
               <select class="form-control" onchange="filterByAdmin(this.value)">
                   <option value="">Search by Sub Admin</option>
@@ -80,6 +80,7 @@
                   <?php } ?>
               </select>
             </div>
+            <?php } ?>
             <!-- Excel Download Button -->
             <button id="downloadExcel" class="btn btn-success btn-sm">
                 <i class="fas fa-file-excel"></i> Download Excel
