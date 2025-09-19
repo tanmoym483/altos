@@ -84,6 +84,7 @@
                         <th>Quantity</th>
                         <th>DP Price</th>
                         <th>MRP</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,6 +100,29 @@
                             <td><?php echo $product->quantity; ?></td>
                             <td><?php echo $product->total_dp_price; ?></td>
                             <td><?php echo $product->total_mrp_price; ?></td>
+                            <td>
+                              <a href="javascript:void(0)" 
+                                    class="pr-2 text-warning"
+                                    onclick="openEditModal(this)"
+                                    data-id="<?php echo $product->id; ?>"
+                                    data-name="<?php echo $product->name; ?>"
+                                    data-phone="<?php echo $product->phone; ?>"
+                                    data-productId="<?php echo $product->productInfo_id; ?>"
+                                    data-product="<?php echo $product->product_name; ?>"
+                                    data-quantity="<?php echo $product->quantity; ?>"
+                                    data-dp="<?php echo $product->total_dp_price; ?>"
+                                    data-mrp="<?php echo $product->total_mrp_price; ?>"
+                                    data-distributor="<?php echo $product->distributorCode; ?>"> <!-- Distributor Code -->
+                                    <i class="fa fa-pen"></i>
+                                </a>
+                                <?php if($_SESSION['role'] == 'superAdmin'){?>
+                                <a href="<?php echo base_url('admin/deletepurchaseproduct/' . $product->id); ?>" 
+                                class="text-danger" 
+                                onclick="return confirm('Are you sure you want to delete this product?');">
+                                <i class="fas fa-trash"></i>
+                                </a>
+                                <?php } ?>
+                            </td>
                         </tr>
                         <?php } 
                     }else{ ?>
@@ -112,7 +136,61 @@
     </div>
 </div>
 
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form id="editForm">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Edit Product Purchase</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="editId" name="id">
+          <input type="hidden" id="productId" name="productid">
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Product Name</label>
+              <input type="text" id="editProductName" name="productName" class="form-control" readonly required>
+            </div>
+            <div class="form-group col-md-3">
+              <label>Quantity</label>
+              <input type="number" id="editQuantity" name="quantity" oninput ="multiplydpmrpp()" class="form-control" required>
+            </div>
+            <div class="form-group col-md-3">
+              <label>DP Price</label>
+              <input type="number" id="editDP" name="total_dp_price" class="form-control" readonly required>
+            </div>
+            <div class="form-group col-md-3">
+              <label>MRP</label>
+              <input type="number" id="editMRP" name="total_mrp_price" class="form-control" readonly required>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" onclick="updatePurchaseproduct()">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- JS for Excel Export -->
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- jQuery + Select2 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 document.getElementById("downloadExcel").addEventListener("click", function () {
@@ -261,4 +339,90 @@ function multiplydpmrp(productIndex) {
     }
 }
 
+function openEditModal(el) {
+    // Get values from data attributes
+    let id          = el.getAttribute("data-id");
+    let productId   = el.getAttribute("data-productId");
+    let product     = el.getAttribute("data-product");
+    let quantity    = el.getAttribute("data-quantity");
+    let dp          = el.getAttribute("data-dp");
+    let mrp         = el.getAttribute("data-mrp");
+
+    // Fill modal fields
+    document.getElementById("editId").value          = id;
+    document.getElementById("productId").value       = productId;
+    document.getElementById("editProductName").value = product;
+    document.getElementById("editQuantity").value    = quantity;
+    document.getElementById("editDP").value          = dp;
+    document.getElementById("editMRP").value         = mrp;
+
+    // Show modal
+    var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+    editModal.show();
+}
+
+function multiplydpmrpp() {
+    let quantity = parseFloat($("#editQuantity").val());
+    let productId = $("#productId").val();
+
+    if (productId && quantity && quantity > 0) {
+        $.ajax({
+            url: "<?php echo base_url('admin/getfetchdpmrp'); ?>", // Make sure this PHP base_url works in your setup
+            method: "POST",
+            data: { productId: productId },
+            success: function(response) {
+                try {
+                    const data = JSON.parse(response);
+
+                    if (data.dpprice && data.mrpprice) {
+                        let dpIncrement = data.dpprice * quantity;
+                        let mrpIncrement = data.mrpprice * quantity;
+
+                        $("#editDP").val(dpIncrement.toFixed(2));
+                        $("#editMRP").val(mrpIncrement.toFixed(2));
+                    } else {
+                        console.error("Invalid price data:", data);
+                        alert("Error: Could not fetch DP/MRP price.");
+                    }
+                } catch (e) {
+                    console.error("Parsing error:", e);
+                    alert("Error: Failed to parse response.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                alert("Error: Failed to fetch product prices.");
+            }
+        });
+    } else {
+        $("#editDP").val("0.00");
+        $("#editMRP").val("0.00");
+    }
+}
+
+function updatePurchaseproduct() {
+    event.preventDefault(); // Prevent default form submission behavior
+
+    var formData = $("#editForm").serialize();
+
+    $.ajax({
+        url: "<?php echo base_url('admin/updatepurchaseproduct'); ?>",
+        method: "POST",
+        data: formData,
+        success: function(response) {
+            var res = JSON.parse(response); // Only if server doesn't return proper JSON header
+            if (res.status === 'success') {
+                alert(res.message);
+                $('#editModal').modal('hide');
+                location.reload(); // ✅ Corrected typo here
+            } else {
+                alert(res.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+            alert("Failed to update product. Please try again.");
+        }
+    });
+}
 </script>

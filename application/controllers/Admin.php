@@ -2042,6 +2042,33 @@ public function updatesoldproduct()
     }
 }
 
+public function updatepurchaseproduct()
+{
+    $data = (object) $this->input->post();
+
+
+        $insertData = [
+            'quantity'        => $data->quantity,
+            'total_dp_price'  => $data->total_dp_price,
+            'total_mrp_price' => $data->total_mrp_price
+        ];
+
+        $update = $this->db->where('id', $data->id)->update('purchasein', $insertData);
+
+        if ($update) {
+            echo json_encode([
+                'status'  => 'success',
+                'message' => 'Product quantity updated successfully.'
+            ]);
+        } else {
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Failed to update product quantity.'
+            ]);
+        }
+
+}
+
 
 public function deletesoldproduct($productId){
     $delete_product = $this->db->where('id', $productId)->delete('product_sold');
@@ -2051,5 +2078,12 @@ public function deletesoldproduct($productId){
     redirect('admin/getsoldproduct');
 }
 
+public function deletepurchaseproduct($productId){
+    $delete_product = $this->db->where('id', $productId)->delete('purchasein');
+    if($delete_product){
+        $this->session->set_flashdata('success', 'Product stock deleted successfully.');
+    }
+    redirect('admin/getpurchaseproduct');
+}
 
 }
