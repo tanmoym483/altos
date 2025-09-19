@@ -68,6 +68,18 @@
     <div class="card p-3 mt-2 shadow-sm border-0">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Product Purchase List</h4>
+            
+            <div>
+              <select class="form-control" onchange="filterByAdmin(this.value)">
+                  <option value="">Search by Sub Admin</option>
+                  <?php foreach($adminuser as $user){ ?>
+                      <option value="<?php echo $user->id; ?>" 
+                          <?php echo ($selectedAdminId == $user->id) ? 'selected' : ''; ?>>
+                          <?php echo $user->userName; ?>
+                      </option>
+                  <?php } ?>
+              </select>
+            </div>
             <!-- Excel Download Button -->
             <button id="downloadExcel" class="btn btn-success btn-sm">
                 <i class="fas fa-file-excel"></i> Download Excel
@@ -424,5 +436,16 @@ function updatePurchaseproduct() {
             alert("Failed to update product. Please try again.");
         }
     });
+}
+
+</script>
+<script>
+function filterByAdmin(adminId) {
+    let url = "<?php echo base_url('admin/getpurchaseproduct'); ?>";
+    if (adminId) {
+        window.location.href = url + "?adminId=" + adminId;
+    } else {
+        window.location.href = url;
+    }
 }
 </script>

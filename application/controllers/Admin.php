@@ -1836,38 +1836,53 @@ public function getpurchaseproduct()
 {
     $role = $this->session->userdata('role');
     $currentUserId = $this->session->userdata('userId');
+    $selectedAdminId = $this->input->get('adminId'); // ✅ comes from dropdown (via GET)
 
     $this->db->select('*')->from('purchasein');
-                        if($role == 'admin'){
-                        $this->db->where('createdBy', $currentUserId);
-                        }
+
+    // ✅ If sub-admin is selected from dropdown
+    if (!empty($selectedAdminId)) {
+        $this->db->where('createdBy', $selectedAdminId);
+    } elseif ($role == 'admin') {
+        $this->db->where('createdBy', $currentUserId);
+    }
+
     $purchaseproduct = $this->db->order_by('id', 'DESC')->get()->result();
-    // echo '<pre>'; print_r($purchaseproduct);die;
+
+    $getadminUsers = $this->db
+        ->select("id, CONCAT_WS(' ', firstName, middleName, lastName) AS userName", false)
+        ->from('users')
+        ->where('role', 'admin')
+        ->get()
+        ->result();
+
     $productInfo = $this->db->select('*')->from('productinfo')->get()->result();
 
+    // Purchase Quantity
     $this->db->select_sum('quantity');
-
-    if ($role == 'admin') {
+    if (!empty($selectedAdminId)) {
+        $this->db->where('createdBy', $selectedAdminId);
+    } elseif ($role == 'admin') {
         $this->db->where('createdBy', $currentUserId);
     }
-
     $purchasequantity = $this->db->get('purchasein')->row()->quantity ?? 0;
 
-
-
+    // Sold Quantity
     $this->db->select_sum('quantity');
-
-    if ($role == 'admin') {
+    if (!empty($selectedAdminId)) {
+        $this->db->where('createdBy', $selectedAdminId);
+    } elseif ($role == 'admin') {
         $this->db->where('createdBy', $currentUserId);
     }
-
     $soldquantity = $this->db->get('product_sold')->row()->quantity ?? 0;
 
-    $this->view('admin/getpurchaseproduct',[
-        'purchaseproduct'   =>  $purchaseproduct,
-        'products'          =>  $productInfo,
-        'purchaseQuantity'  =>  $purchasequantity,
-        'soldquantity'      =>  $soldquantity
+    $this->view('admin/getpurchaseproduct', [
+        'purchaseproduct'   => $purchaseproduct,
+        'products'          => $productInfo,
+        'purchaseQuantity'  => $purchasequantity,
+        'soldquantity'      => $soldquantity,
+        'adminuser'         => $getadminUsers,
+        'selectedAdminId'   => $selectedAdminId
     ]);
 }
 
