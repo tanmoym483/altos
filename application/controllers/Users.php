@@ -797,9 +797,8 @@ class Users extends MY_Controller
             }
             redirect('dashboard');
         }
-            redirect('dashboard');
 
-        // $this->view("admin/users/changePassword");
+        $this->view("admin/users/changePassword");
     }
 
 

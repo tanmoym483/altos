@@ -1936,6 +1936,15 @@ public function getproductstock()
 {
     $role = $this->session->userdata('role');
     $currentUserId = $this->session->userdata('userId');
+    $selectedAdminId = $this->input->get('adminId'); // ✅ get adminId from dropdown filter
+
+    // Get admin users (for filter dropdown)
+    $getadminUsers = $this->db
+        ->select("id, CONCAT_WS(' ', firstName, middleName, lastName) AS userName", false)
+        ->from('users')
+        ->where('role', 'admin')
+        ->get()
+        ->result();
 
     $product_info = $this->db
         ->select('*')
@@ -1946,29 +1955,36 @@ public function getproductstock()
     $stock_data = [];
 
     foreach ($product_info as $product) {
-        // Purchase totals
-        $purchase = $this->db->select_sum('quantity')
-                            ->select_sum('total_dp_price')
-                            ->select_sum('total_mrp_price')
-                            ->where('productinfo_id', $product->id);
-                            if($role == 'admin'){
-                                $this->db->where('createdBy', $currentUserId);
-                            }
-        $purchase = $this->db->get('purchasein')
-                            ->row();
+        // ---------- PURCHASE ----------
+        $this->db->select_sum('quantity')
+                 ->select_sum('total_dp_price')
+                 ->select_sum('total_mrp_price')
+                 ->where('productinfo_id', $product->id);
 
-        // Sold totals
-        $sold = $this->db->select_sum('quantity')
-                        ->select_sum('total_dp_price')
-                        ->select_sum('total_mrp_price')
-                        ->where('productinfo_id', $product->id);
-                        if($role == 'admin'){
-                                $this->db->where('createdBy', $currentUserId);
-                        }
-        $sold = $this->db->get('product_sold')
-                        ->row();
+        // ✅ Apply filter: if superAdmin selects admin OR if role is admin
+        if ($selectedAdminId) {
+            $this->db->where('createdBy', $selectedAdminId);
+        } elseif ($role == 'admin') {
+            $this->db->where('createdBy', $currentUserId);
+        }
 
-        // Prevent null values (if no rows exist)
+        $purchase = $this->db->get('purchasein')->row();
+
+        // ---------- SOLD ----------
+        $this->db->select_sum('quantity')
+                 ->select_sum('total_dp_price')
+                 ->select_sum('total_mrp_price')
+                 ->where('productinfo_id', $product->id);
+
+        if ($selectedAdminId) {
+            $this->db->where('createdBy', $selectedAdminId);
+        } elseif ($role == 'admin') {
+            $this->db->where('createdBy', $currentUserId);
+        }
+
+        $sold = $this->db->get('product_sold')->row();
+
+        // ---------- SAFE VALUES ----------
         $purchase_qty   = $purchase->quantity ?? 0;
         $purchase_dp    = $purchase->total_dp_price ?? 0;
         $purchase_mrp   = $purchase->total_mrp_price ?? 0;
@@ -1977,7 +1993,7 @@ public function getproductstock()
         $sold_dp        = $sold->total_dp_price ?? 0;
         $sold_mrp       = $sold->total_mrp_price ?? 0;
 
-        // Calculate stock
+        // ---------- CALCULATE STOCK ----------
         $stockquantity  = $purchase_qty - $sold_qty;
         $stockdpprice   = $purchase_dp - $sold_dp;
         $stockmrpprice  = $purchase_mrp - $sold_mrp;
@@ -1997,10 +2013,13 @@ public function getproductstock()
     }
 
     // Pass data to view
-    $data['stock_data'] = $stock_data;
-    // echo '<pre>'; print_r($data);die;
+    $data['stock_data']      = $stock_data;
+    $data['adminuser']       = $getadminUsers;
+    $data['selectedAdminId'] = $selectedAdminId; // ✅ keep selected value in dropdown
+
     $this->view('admin/getproductstock', $data);
 }
+
 
 public function updatesoldproduct()
 {

@@ -79,6 +79,53 @@ class Auth extends MY_Controller
             }
         }
     }
+
+
+    public function phone_login()
+{
+    // Get raw POST JSON input
+    $json = json_decode(file_get_contents("php://input"), true);
+
+    if (!$json || empty($json['phone']) || empty($json['uid'])) {
+        // Invalid request
+        echo json_encode(['success' => false, 'message' => 'Invalid request']);
+        return;
+    }
+
+    $phone = $json['phone'];
+    $uid = $json['uid'];
+
+    // Load your User model (adjust model name/path accordingly)
+
+    // Check if user exists by phone number
+    $user = $this->userModel->get_user_by_phone($phone);
+
+    if ($user) {
+        // User exists — log them in
+        $this->session->set_userdata('user_id', $user['id']);
+        echo json_encode(['success' => true, 'message' => 'Logged in']);
+    } else {
+        // User does not exist — create new user
+        $newUserData = [
+            'phone' => $phone,
+            'firebase_uid' => $uid,
+            // Add other default fields as needed
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        $newUserId = $this->userModel->create_user($newUserData);
+
+        if ($newUserId) {
+            // Log in newly created user
+            $this->session->set_userdata('user_id', $newUserId);
+            echo json_encode(['success' => true, 'message' => 'User created and logged in']);
+        } else {
+            // Failed to create user
+            echo json_encode(['success' => false, 'message' => 'Failed to create user']);
+        }
+    }
+}
+
     public function logout()
     {
         $this->session->sess_destroy();

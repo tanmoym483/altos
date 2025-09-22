@@ -4,7 +4,19 @@
     <div class="card p-4 mt-3 shadow border-0">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
             <h4 class="mb-2 mb-md-0 fw-bold text-primary">📦 Total Stock</h4>
-            
+            <?php if($this->session->userdata('role') == 'superAdmin'){?>
+            <div>
+              <select class="form-control" onchange="filterByAdmin(this.value)">
+                  <option value="">Search by Sub Admin</option>
+                  <?php foreach($adminuser as $user){ ?>
+                      <option value="<?php echo $user->id; ?>" 
+                          <?php echo ($selectedAdminId == $user->id) ? 'selected' : ''; ?>>
+                          <?php echo $user->userName; ?>
+                      </option>
+                  <?php } ?>
+              </select>
+            </div>
+            <?php } ?>
             <div class="d-flex gap-2 justify-content-between">
                 <!-- Excel Download Button -->
                 <button id="downloadExcel" class="btn btn-success btn-sm">
@@ -109,3 +121,13 @@ document.getElementById("searchInput").addEventListener("keyup", function () {
         border-radius: 8px;
     }
 </style>
+<script>
+function filterByAdmin(adminId) {
+    let url = "<?php echo base_url('admin/getproductstock'); ?>";
+    if (adminId) {
+        window.location.href = url + "?adminId=" + adminId;
+    } else {
+        window.location.href = url;
+    }
+}
+</script>
