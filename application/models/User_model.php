@@ -1289,4 +1289,14 @@ class User_model extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function get_user_by_phone($phone){
+        return $this->db->get_where('users', ['phone' => $phone])->row_array();
+    }
+
+    public function create_user($data)
+    {
+        $this->db->insert('users', $data);
+        return $this->db->insert_id();
+    }
 }

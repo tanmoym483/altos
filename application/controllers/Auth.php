@@ -102,22 +102,23 @@ class Auth extends MY_Controller
 
     if ($user) {
         // User exists — log them in
-        $this->session->set_userdata('user_id', $user['id']);
+        $this->session->set_userdata('userId', $user['id']);
         echo json_encode(['success' => true, 'message' => 'Logged in']);
     } else {
         // User does not exist — create new user
         $newUserData = [
             'phone' => $phone,
-            'firebase_uid' => $uid,
+            // 'firebase_uid' => $uid,
             // Add other default fields as needed
-            'created_at' => date('Y-m-d H:i:s')
+            'role'  => 'customer',
+            'createdAt' => date('Y-m-d H:i:s')
         ];
 
         $newUserId = $this->userModel->create_user($newUserData);
 
         if ($newUserId) {
             // Log in newly created user
-            $this->session->set_userdata('user_id', $newUserId);
+            $this->session->set_userdata('userId', $newUserId);
             echo json_encode(['success' => true, 'message' => 'User created and logged in']);
         } else {
             // Failed to create user
