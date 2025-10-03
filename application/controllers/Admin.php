@@ -2120,4 +2120,24 @@ public function deletepurchaseproduct($productId){
     redirect('admin/getpurchaseproduct');
 }
 
+public function updatePrice()
+{
+    $productId = $this->input->post('product_id');
+    $mrp       = $this->input->post('mrp');
+    $dp        = $this->input->post('dp');
+    $bv        = $this->input->post('bv');
+
+    $data = [
+        'mrp' => $mrp,
+        'dp'  => $dp,
+        'bv'  => $bv
+    ];
+
+    $this->db->where('id', $productId)->update('productinfo', $data);
+
+    $this->session->set_flashdata('success', 'Product prices updated successfully!');
+    redirect('admin/getproductstock');
+}
+
+
 }

@@ -48,10 +48,20 @@
                         ?>
                         <tr>
                             <td><?php echo $count++; ?></td>
-                            <td class="fw-semibold text-dark"><?php echo $product['product_name']; ?><br>
-                                <small><strong>MRP:</strong><?php echo $product['single_mrp']; ?></small>&nbsp;
-                                <small><strong>DP:</strong><?php echo $product['single_dp']; ?></small>&nbsp;
-                                <small><strong>BV:</strong><?php echo $product['single_bv']; ?></small>
+                            <td class="fw-semibold text-dark">
+                                <?php echo $product['product_name']; ?><br>
+                                <small><strong>MRP:</strong> <?php echo $product['single_mrp']; ?></small>&nbsp;
+                                <small><strong>DP:</strong> <?php echo $product['single_dp']; ?></small>&nbsp;
+                                <small><strong>BV:</strong> <?php echo $product['single_bv']; ?></small>
+
+                                <!-- Edit Button -->
+                                <a class="btn btn-sm btn-outline-primary" 
+                                onclick="opendpmrpeditmodal('<?php echo $product['product_id']; ?>',
+                                                            '<?php echo $product['single_mrp']; ?>',
+                                                            '<?php echo $product['single_dp']; ?>',
+                                                            '<?php echo $product['single_bv']; ?>')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
                             </td>
                             <td class="text-primary fw-bold"><?php echo $product['purchase_qty']; ?></td>
                             <td class="text-danger fw-bold"><?php echo $product['sold_qty']; ?></td>
@@ -70,6 +80,48 @@
         </div>
     </div>
 </div>
+
+<!-- Update MRP/DP/BV Modal -->
+<div class="modal fade" id="editPriceModal" tabindex="-1" role="dialog" aria-labelledby="editPriceModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="editPriceModalLabel">Update Product Price</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <form id="updatePriceForm" method="post" action="<?= base_url('admin/updatePrice'); ?>">
+        <div class="modal-body">
+          <input type="hidden" name="product_id" id="product_id">
+
+          <div class="form-group">
+            <label>MRP</label>
+            <input type="number" class="form-control" name="mrp" id="mrp" required>
+          </div>
+
+          <div class="form-group">
+            <label>DP</label>
+            <input type="number" class="form-control" name="dp" id="dp" required>
+          </div>
+
+          <div class="form-group">
+            <label>BV</label>
+            <input type="number" class="form-control" name="bv" id="bv" required>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 <!-- JS for Excel Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -130,4 +182,14 @@ function filterByAdmin(adminId) {
         window.location.href = url;
     }
 }
+</script>
+
+<script>
+  function opendpmrpeditmodal(id, mrp, dp, bv) {
+    $('#product_id').val(id);
+    $('#mrp').val(mrp);
+    $('#dp').val(dp);
+    $('#bv').val(bv);
+    $('#editPriceModal').modal('show'); // Bootstrap 4 jQuery way
+  }
 </script>
