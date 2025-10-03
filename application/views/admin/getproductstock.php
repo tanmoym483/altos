@@ -55,6 +55,7 @@
                                 <small><strong>BV:</strong> <?php echo $product['single_bv']; ?></small>
 
                                 <!-- Edit Button -->
+                                 <?php if($this->session->userdata('role') == 'superAdmin'){?>
                                 <a class="btn btn-sm btn-outline-primary" 
                                 onclick="opendpmrpeditmodal('<?php echo $product['product_id']; ?>',
                                                             '<?php echo $product['single_mrp']; ?>',
@@ -62,6 +63,7 @@
                                                             '<?php echo $product['single_bv']; ?>')">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
+                                <?php } ?>
                             </td>
                             <td class="text-primary fw-bold"><?php echo $product['purchase_qty']; ?></td>
                             <td class="text-danger fw-bold"><?php echo $product['sold_qty']; ?></td>
