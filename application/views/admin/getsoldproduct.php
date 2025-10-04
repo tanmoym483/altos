@@ -123,53 +123,75 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- PHP Loop to display products -->
-                    <?php 
-                    if($soldproduct){
-                        $count = 1;
-                        foreach($soldproduct as $product){
-                        ?>
-                        <tr>
-                            <td><?php echo $count++; ?></td>
-                            <td><?php echo date('d-m-Y H:i A',strtotime($product->createdAt)); ?></td>
-                            <td><?php echo $product->name; ?><br><small><?php echo $product->phone; ?></small></td>
-                            <td><?php echo $product->distributorCode; ?></td> <!-- Distributor Code -->
-                            <td><?php echo $product->productName; ?></td>
-                            <td><?php echo $product->quantity; ?></td>
-                            <td><?php echo $product->total_dp_price; ?></td>
-                            <td><?php echo $product->total_mrp_price; ?></td>
-                            <!-- Action Column -->
-                            <td>
-                                <a href="javascript:void(0)" 
-                                    class="pr-2 text-warning"
-                                    onclick="openEditModal(this)"
-                                    data-id="<?php echo $product->id; ?>"
-                                    data-name="<?php echo $product->name; ?>"
-                                    data-phone="<?php echo $product->phone; ?>"
-                                    data-productId="<?php echo $product->productinfo_id; ?>"
-                                    data-product="<?php echo $product->productName; ?>"
-                                    data-quantity="<?php echo $product->quantity; ?>"
-                                    data-dp="<?php echo $product->total_dp_price; ?>"
-                                    data-mrp="<?php echo $product->total_mrp_price; ?>"
-                                    data-distributor="<?php echo $product->distributorCode; ?>"> <!-- Distributor Code -->
-                                    <i class="fa fa-pen"></i>
-                                </a>
-                                <?php if($_SESSION['role'] == 'superAdmin'){?>
-                                <a href="<?php echo base_url('admin/deletesoldproduct/' . $product->id); ?>" 
-                                class="text-danger" 
-                                onclick="return confirm('Are you sure you want to delete this product?');">
-                                <i class="fas fa-trash"></i>
-                                </a>
-                                <?php } ?>
-                            </td>
-                        </tr>
-                        <?php } 
-                    } else { ?>
-                        <tr>
-                            <td colspan="9" class="text-danger fw-bold">No Records Found</td>
-                        </tr>
+<?php 
+$groupedData = [];
+foreach($soldproduct as $product){
+    $key = $product->customerId . '_' . $product->customerCreatedAt; // unique group
+    $groupedData[$key][] = $product;
+}
+
+if($soldproduct){
+    $count = 1;
+    foreach($groupedData as $key => $products){ 
+        $rowspan = count($products);
+        $firstRow = true;
+        foreach($products as $product){ ?>
+            <tr>
+
+                <?php if($firstRow){ ?>
+                <td rowspan="<?php echo $rowspan; ?>"><?php echo $count++; ?></td>
+                    <td rowspan="<?php echo $rowspan; ?>">
+                        <?php echo date('d-m-Y H:i A', strtotime($product->customerCreatedAt)); ?>
+                    </td>
+                    <td rowspan="<?php echo $rowspan; ?>">
+                        <?php echo $product->name; ?><br>
+                        <small><?php echo $product->phone; ?></small>
+                    </td>
+                    <td rowspan="<?php echo $rowspan; ?>">
+                        <?php echo $product->distributorCode; ?>
+                    </td>
+                <?php } ?>
+
+                <td><?php echo $product->productName; ?></td>
+                <td><?php echo $product->quantity; ?></td>
+                <td><?php echo $product->total_dp_price; ?></td>
+                <td><?php echo $product->total_mrp_price; ?></td>
+                <td>
+                    <a href="javascript:void(0)" 
+                        class="pr-2 text-warning"
+                        onclick="openEditModal(this)"
+                        data-id="<?php echo $product->id; ?>"
+                        data-name="<?php echo $product->name; ?>"
+                        data-phone="<?php echo $product->phone; ?>"
+                        data-productId="<?php echo $product->productinfo_id; ?>"
+                        data-product="<?php echo $product->productName; ?>"
+                        data-quantity="<?php echo $product->quantity; ?>"
+                        data-dp="<?php echo $product->total_dp_price; ?>"
+                        data-mrp="<?php echo $product->total_mrp_price; ?>"
+                        data-distributor="<?php echo $product->distributorCode; ?>">
+                        <i class="fa fa-pen"></i>
+                    </a>
+                    <?php if($_SESSION['role'] == 'superAdmin'){?>
+                    <a href="<?php echo base_url('admin/deletesoldproduct/' . $product->id); ?>" 
+                       class="text-danger" 
+                       onclick="return confirm('Are you sure you want to delete this product?');">
+                        <i class="fas fa-trash"></i>
+                    </a>
                     <?php } ?>
-                </tbody>
+                </td>
+            </tr>
+        <?php 
+            $firstRow = false;
+        } 
+    }
+} else { ?>
+    <tr>
+        <td colspan="9" class="text-danger fw-bold">No Records Found</td>
+    </tr>
+<?php } ?>
+</tbody>
+
+
             </table>
         </div>
     </div>
