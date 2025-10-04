@@ -132,10 +132,10 @@ foreach($soldproduct as $product){
 
 if($soldproduct){
     $count = 1;
-    foreach($groupedData as $key => $products){ 
-        $rowspan = count($products);
+    foreach($groupedData as $key => $productss){ 
+        $rowspan = count($productss);
         $firstRow = true;
-        foreach($products as $product){ ?>
+        foreach($productss as $product){ ?>
             <tr>
 
                 <?php if($firstRow){ ?>
