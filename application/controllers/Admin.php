@@ -1892,7 +1892,7 @@ public function getsoldproduct()
     $role = $this->session->userdata('role');
 
                     $this->db
-                    ->select('product_sold.*, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName')
+                    ->select('product_sold.*, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName, customer_info.createdAt as customerCreatedAt')
                     ->from('product_sold')
                     ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
                     ->join('productinfo','productinfo.id = product_sold.productinfo_id');
