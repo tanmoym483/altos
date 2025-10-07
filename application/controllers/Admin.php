@@ -2142,6 +2142,8 @@ public function updatePrice()
 public function productinvoice($customerId)
 {
     $currentUserId = $this->session->userdata('userId');
+    $role = $this->session->userdata('role');
+
         $this->load->library('pdf');
 
         $this->db
