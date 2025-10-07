@@ -17,6 +17,8 @@ class Admin extends MY_Controller
        // $this->load->model('Healthcard_model', 'healthcardModel');
         $this->load->helper('transaction_logger');
         $this->load->library("pagination");
+        $this->load->library("pdf");
+
     }
     public function commingsoon(){
         $this->view('admin/comming-soon');
