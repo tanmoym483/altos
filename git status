@@ -1,0 +1,233 @@
+[33mcommit 5ceab7c4b93b11d66626ba06fc2c28478304ea74[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 13:05:38 2025 +0530
+
+    changes done
+
+[33mcommit 800144a1a598ac74ab3083b9937cf059a824df43[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 13:02:45 2025 +0530
+
+    changes
+
+[33mcommit d14a1680d05d1296c8591c0d50e879252e1a1094[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 13:00:40 2025 +0530
+
+    changes in pdf.php
+
+[33mcommit 5b41767cd7c4d4b65d3f46ed710b4ceeb09169d6[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 12:34:23 2025 +0530
+
+    changes are mad
+
+[33mcommit 43d2f0afd44acca743c248479775f9a2fabd2d1e[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 12:31:50 2025 +0530
+
+    changes are made
+
+[33mcommit 82c7fd95fa93ad1f9b0ee59c11bf2f2746942802[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 12:14:37 2025 +0530
+
+    changes made in admin controller
+
+[33mcommit d6dd8d1e0e2a256112d076c315783342431f9bd5[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 12:08:43 2025 +0530
+
+    changes in admin controller
+
+[33mcommit ac28f0262404d003a4ccee0eeed792f1a4b9f8c7[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Oct 7 11:38:40 2025 +0530
+
+    changes made to generate invoice
+
+[33mcommit e28158d315549776509ac37fd631eb32baefcfbb[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Sat Oct 4 12:31:32 2025 +0530
+
+    changes in getsoldproduct.php page
+
+[33mcommit d63819cbd66f70220ed19fa24070463e1a9e5bfd[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Sat Oct 4 12:00:43 2025 +0530
+
+    customer_info.createdAt added in admin controller
+
+[33mcommit 88fb65234541c115161653ed7de17f9126858c32[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Sat Oct 4 11:51:53 2025 +0530
+
+    rowspan added in getsoldproduct.php page
+
+[33mcommit f10247b60f459fa23d51ef0369b81377b65b52cd[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Fri Oct 3 12:38:43 2025 +0530
+
+    given access to update superAdmin person
+
+[33mcommit 13f7f6c65dfe295d87f17564cc2d84a67936ed52[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Fri Oct 3 12:29:24 2025 +0530
+
+    mrp,dp,bv price update section are created
+
+[33mcommit 5925364e02357d52aa616dda2a96a625710cff98[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Tue Sep 23 10:03:23 2025 +0530
+
+    modified in user_model and auth controller
+
+[33mcommit a62219a99633497a0565c49056c45075537c6edf[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Mon Sep 22 18:08:32 2025 +0530
+
+    many files have modified
+
+[33mcommit 8044dc0215e3040d9480d99b18213b655c351875[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Fri Sep 19 19:14:49 2025 +0530
+
+    comment on change password function on users controller
+
+[33mcommit d21a762deb539ff3cf3ce86bf0ac51ea53e45cdc[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Fri Sep 19 18:25:12 2025 +0530
+
+    changes on getpurchaseproduct view page
+
+[33mcommit e4a94cda1b64ef293a10aaa04fb2fa5fa5396f29[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Fri Sep 19 18:13:12 2025 +0530
+
+    changes are made
+
+[33mcommit e32f3305ca717b6b299ffb8b1837160a2bd0c04f[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Fri Sep 19 18:03:44 2025 +0530
+
+    changes in admin controll and a view page
+
+[33mcommit 6cef37207d6acc51dcbe36a28c045a0fc7bbc1a5[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Fri Sep 19 13:46:35 2025 +0530
+
+    changes in admin controller and getpurchaseproduct view page
+
+[33mcommit ac1ba3da9e142ad43f5486c5cea778c58ece7864[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Fri Sep 19 13:02:52 2025 +0530
+
+    changes in many pages
+
+[33mcommit 4d0a94a168749a99f9321993bec4c455f118eaa0[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Fri Sep 19 12:36:54 2025 +0530
+
+    many files have changed
+
+[33mcommit fb667587a37b1664ecf34c3ac1b31fe27eadb53f[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Thu Sep 18 17:59:48 2025 +0530
+
+    some changes on various page
+
+[33mcommit ec9b6e3b1d80f659c8c2e01a5093fd76e02f5699[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Thu Sep 18 17:35:00 2025 +0530
+
+    changes on getsoldproduct view page
+
+[33mcommit 80cd4177b1230ba4c7820ca312ac4f2d1653a7a6[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Thu Sep 18 17:28:24 2025 +0530
+
+    some changes on getpurchaseproduct
+
+[33mcommit b978fffd897e5e1ed02f3719cd9681f4e669601b[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Thu Sep 18 17:20:34 2025 +0530
+
+    some changes in admin contoller and getpurchaseproduct view page
+
+[33mcommit e2ae9bcd18fe4b9e24ad407307e2228208189415[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Wed Sep 17 20:16:46 2025 +0530
+
+    many file modified
+
+[33mcommit 7d359b6f842109568addac23bb23089f6eb84ddb[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Wed Sep 17 18:59:04 2025 +0530
+
+    modified in admin controller, admin_model, getpurchaseproduct page
+
+[33mcommit ba3665b4271244e82282a047b69a5daf6da3c802[m
+Author: tanmoym483 <tanmoym483@gmai.com>
+Date:   Wed Sep 17 18:28:53 2025 +0530
+
+    many pages are modified
+
+[33mcommit 69269b4fa6bc67f48bc81f33bc87bd09bd89ae5a[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Sep 16 15:51:07 2025 +0530
+
+    changes hppen on dashboard view page
+
+[33mcommit 1018dec2a54f6c63ea7f6ea015e27b9d31e75614[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Sep 16 15:23:51 2025 +0530
+
+    modified in admin controller,dashboard view and getproductstock view page
+
+[33mcommit 7f35c91d54f219edcc63dfac2d67953eff88f776[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Sep 16 13:49:03 2025 +0530
+
+    modified
+
+[33mcommit 6f45363414b8ef088d0f923bf3532bdd15f7b629[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Tue Sep 16 13:40:26 2025 +0530
+
+    many files are added
+
+[33mcommit d387c420579b99ed7e29af84d36c455b892b0efb[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Mon Sep 15 20:28:56 2025 +0530
+
+    dashboard data modified
+
+[33mcommit 19b7999e61c4a7cff114ddfe1c412241ba331819[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Mon Sep 15 20:05:32 2025 +0530
+
+    changes on dashboard,admin controller,admin model
+
+[33mcommit 2404c87db33e4605891e206d562bab5ed625ba6c[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Mon Sep 15 19:27:08 2025 +0530
+
+    many code was changed
+
+[33mcommit 74844fa59ad719a33a36aacc7d7c806496c493b1[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Mon Sep 15 12:34:02 2025 +0530
+
+    url name is changed
+
+[33mcommit a647b664165269e47ad34b7792d7a84e569d170e[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Mon Sep 15 12:29:35 2025 +0530
+
+    database name changed
+
+[33mcommit b68c842f85cf21970c05437522db608b84bfc4fa[m
+Author: tanmoym483 <tanmoym483@gmail.com>
+Date:   Mon Sep 15 11:54:27 2025 +0530
+
+    initial commit
