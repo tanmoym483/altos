@@ -120,6 +120,7 @@
                         <th>DP Price</th>
                         <th>MRP</th>
                         <th>Action</th>
+                        <th>Invoice</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -179,6 +180,9 @@ if($soldproduct){
                     </a>
                     <?php } ?>
                 </td>
+                <?php if($firstRow){ ?>
+                <td rowspan="<?php echo $rowspan; ?>"><a href="<?php echo base_url('admin/productinvoice/'. $product->customerId); ?>"><i class="fas fa-eye"></i></a></td>
+                <?php } ?>
             </tr>
         <?php 
             $firstRow = false;

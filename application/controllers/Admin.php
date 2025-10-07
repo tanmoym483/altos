@@ -1892,7 +1892,7 @@ public function getsoldproduct()
     $role = $this->session->userdata('role');
 
                     $this->db
-                    ->select('product_sold.*, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName, customer_info.createdAt as customerCreatedAt')
+                    ->select('product_sold.*, customer_info.id as customerId, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName, customer_info.createdAt as customerCreatedAt')
                     ->from('product_sold')
                     ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
                     ->join('productinfo','productinfo.id = product_sold.productinfo_id');
@@ -2139,5 +2139,44 @@ public function updatePrice()
     redirect('admin/getproductstock');
 }
 
+public function productinvoice($customerId)
+{
+    $currentUserId = $this->session->userdata('userId');
+        $this->load->library('pdf');
+
+        $this->db
+                    ->select('product_sold.*, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName, customer_info.createdAt as customerCreatedAt')
+                    ->from('product_sold')
+                    ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
+                    ->join('productinfo','productinfo.id = product_sold.productinfo_id')
+                    ->where('customer_info.id', $customerId);
+                    if($role == 'admin'){
+                        $this->db->where('product_sold.createdBy', $currentUserId);
+                    }
+    $soldproduct = $this->db->order_by('id','DESC')
+                    ->get()
+                    ->result();
+                    // echo '<pre>'; print_r($soldproduct);die;
+        $html = $this->load->view(
+        'admin/invoicepdf',
+        [
+            'soldproduct' => $soldproduct
+        ],
+        true // return as string
+    );
+
+
+    // Load HTML to Dompdf
+    $this->pdf->loadHtml($html);
+
+    // Set paper size and orientation
+    $this->pdf->setPaper('A4', 'portrait');
+
+    // Render the PDF
+    $this->pdf->render();
+
+    // Output the PDF to browser (0 = preview in browser)
+    $this->pdf->stream("invoice.pdf", array("Attachment" => 1));
+}
 
 }
