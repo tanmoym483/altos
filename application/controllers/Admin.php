@@ -2141,36 +2141,44 @@ public function updatePrice()
 
 public function productinvoice($customerId)
 {
-    ini_set('memory_limit', '512M');
-    ini_set('max_execution_time', 300);
-
     $currentUserId = $this->session->userdata('userId');
     $role = $this->session->userdata('role');
 
-    $this->load->library('pdf');
+        $this->load->library('pdf');
 
-    $this->db
-        ->select('product_sold.*, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName, customer_info.createdAt as customerCreatedAt')
-        ->from('product_sold')
-        ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
-        ->join('productinfo','productinfo.id = product_sold.productinfo_id')
-        ->where('customer_info.id', $customerId);
+        $this->db
+                    ->select('product_sold.*, customer_info.name, customer_info.phone, customer_info.distributorCode, productinfo.name as productName, customer_info.createdAt as customerCreatedAt')
+                    ->from('product_sold')
+                    ->join('customer_info','customer_info.id = product_sold.customerId', 'left')
+                    ->join('productinfo','productinfo.id = product_sold.productinfo_id')
+                    ->where('customer_info.id', $customerId);
+                    if($role == 'admin'){
+                        $this->db->where('product_sold.createdBy', $currentUserId);
+                    }
+    $soldproduct = $this->db->order_by('id','DESC')
+                    ->get()
+                    ->result();
+                    // echo '<pre>'; print_r($soldproduct);die;
+        $html = $this->load->view(
+        'admin/invoicepdf',
+        [
+            'soldproduct' => $soldproduct
+        ],
+        true // return as string
+    );
 
-    if($role == 'admin'){
-        $this->db->where('product_sold.createdBy', $currentUserId);
-    }
 
-    $soldproduct = $this->db->order_by('id','DESC')->get()->result();
-
-    $html = $this->load->view('admin/invoicepdf', ['soldproduct' => $soldproduct], true);
-
-    $this->pdf->set_option('isRemoteEnabled', true);
+    // Load HTML to Dompdf
     $this->pdf->loadHtml($html);
+
+    // Set paper size and orientation
     $this->pdf->setPaper('A4', 'portrait');
+
+    // Render the PDF
     $this->pdf->render();
 
-    // Stream directly to browser
-    $this->pdf->stream("invoice.pdf", array("Attachment" => false));
+    // Output the PDF to browser (0 = preview in browser)
+    $this->pdf->stream("invoice.pdf", array("Attachment" => 1));
 }
 
 }
