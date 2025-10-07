@@ -12,40 +12,29 @@
  * @link        https://github.com/ardianta/codeigniter-dompdf
  */
 use Dompdf\Dompdf;
-class Pdf extends Dompdf{
-    /**
-     * PDF filename
-     * @var String
-     */
+
+class Pdf extends Dompdf {
+
     public $filename;
-    public function __construct(){
+
+    public function __construct() {
         parent::__construct();
         $this->filename = "laporan.pdf";
+
+        // enable external CSS/images
+        $this->set_option('isRemoteEnabled', true);
+        $this->setPaper('A4', 'portrait');
     }
-    /**
-     * Get an instance of CodeIgniter
-     *
-     * @access    protected
-     * @return    void
-     */
-    protected function ci()
-    {
+
+    protected function ci() {
         return get_instance();
     }
-    /**
-     * Load a CodeIgniter view into domPDF
-     *
-     * @access    public
-     * @param    string    $view The view to load
-     * @param    array    $data The view data
-     * @return    void
-     */
-    public function load_view($view, $data = array()){
+
+    public function load_view($view, $data = array()) {
         $html = $this->ci()->load->view($view, $data, TRUE);
         $this->load_html($html);
-        // Render the PDF
         $this->render();
-            // Output the generated PDF to Browser
-               $this->stream($this->filename, array("Attachment" => false));
+        ob_end_clean();
+        $this->stream($this->filename, array("Attachment" => false));
     }
 }
